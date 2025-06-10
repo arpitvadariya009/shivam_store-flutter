@@ -35,83 +35,98 @@ class LoginScreen extends StatelessWidget {
 
       body: GetBuilder<AuthController>(
         builder: (c) {
-          return ListView(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            children: [
-              titleText(value: Strings.kFirmName),
-              textFormField(
-                controller: c.firmNameTXTController,
-                hintText: Strings.kEnter + Strings.kFirmName,
-                validator:
-                    (value) => Validators.validate(value, Strings.kFirmName),
+          return Form(
+            key: c.loginFormKey,
+            child: ListView(
+              padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.2,
+                vertical: 16,
               ),
-              AppSpacing.h10,
-
-              titleText(value: Strings.kPassword),
-              textFormField(
-                controller: c.passwordTXTController,
-                validator:
-                    (value) => Validators.validate(value, Strings.kPassword),
-
-                hintText: Strings.kEnter + Strings.kPassword,
-
-                suffixIcon: GestureDetector(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.kDashboardScreen);
-                  },
-                  child: Row(
+              children: [
+                titleText(value: Strings.kMobileNumber),
+                textFormField(
+                  controller: c.mobileTXTController,
+                  validator: Validators.validateMobile,
+                  hintText: Strings.kEnteryour10digitnumber,
+                  keyboardType: TextInputType.phone,
+                  prefixIcon: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      cText(value: Strings.kSHOW, fontSize: 14),
                       AppSpacing.w10,
+                      Text(
+                        '+91',
+                        style: TextStyle(
+                          color: AppColors.blackColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
+                  ],
+                ),
+                AppSpacing.h10,
+
+                titleText(value: Strings.kPIN),
+                pinTextField(
+                  length: 4,
+                  appContext: context,
+                  controller: c.pinTXTController,
+                  validator:
+                      (value) => Validators.validate(value, Strings.kPIN),
+                ),
+                AppSpacing.h5,
+                cText(
+                  value: Strings.kResetPIN,
+                  color: AppColors.hintColor,
+                  fontSize: 10,
+                ),
+                AppSpacing.h24,
+                ButtonWidget(
+                  onTap: () async {
+                    await c.login(context: context);
+
+                    // Get.toNamed(AppRoutes.kVerificationScreen);
+                  },
+                  title: Strings.kLogin,
+                ),
+                AppSpacing.h16,
+
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: Strings.kDonthaveanaccountSignUp,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppColors.blackColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text: Strings.kSignUp,
+                        recognizer:
+                            TapGestureRecognizer()
+                              ..onTap = () {
+                                c.clean();
+
+                                Get.back();
+                              },
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          fontSize: 14,
+                          color: AppColors.blackColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
-              AppSpacing.h5,
-              cText(
-                value: Strings.kForgetPassword,
-                color: AppColors.hintColor,
-                fontSize: 10,
-              ),
-              AppSpacing.h24,
-              ButtonWidget(
-                onTap: () {
-                  Get.toNamed(AppRoutes.kVerificationScreen);
-                },
-                title: Strings.kLogin,
-              ),
-              AppSpacing.h16,
-
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: Strings.kDonthaveanaccountSignUp,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.blackColor,
-                      ),
-                    ),
-                    TextSpan(
-                      text: Strings.kSignUp,
-                      recognizer:
-                          TapGestureRecognizer()
-                            ..onTap = () {
-                              Get.back();
-                            },
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        fontSize: 14,
-                        color: AppColors.blackColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),

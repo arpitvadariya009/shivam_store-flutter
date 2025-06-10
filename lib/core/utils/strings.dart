@@ -3,18 +3,20 @@ class Strings {
   static const String kFirmName = "Firm Name";
   static const String kCity = "City";
   static const String kMobileNumber = "Mobile Number";
-  static const String kPassword = "Password";
+  static const String kPIN = "PIN";
   static const String kIAgreewithTermPrivcy =
       "I Agree with Terms of Service and Privacy Policy";
   static const String kRegister = "Register";
   static const String kAlreadyhaveanaccount = "Already have an account? ";
   static const String kSignIn = "Sign In";
   static const String kSignUp = "Sign Up";
-  static const String kForgetPassword = "Forget Password?";
+  static const String kResetPIN = "Reset PIN?";
   static const String kSHOW = "SHOW";
   static const String kHIDE = "HIDE";
   static const String kLoginNow = "Login Now!";
   static const String kLogin = "Login";
+  static const String kPleaseacceptthePrivacyPolicytocontinue =
+      "Please accept the Privacy Policy to continue.";
   static const String kDonthaveanaccountSignUp = "Don’t have an account? ";
   static const String kVerifying = "Verifying";
   static const String kWellgetbacktoyoushortly =
@@ -32,6 +34,8 @@ class Strings {
   static const String kShop = "Shop";
   static const String kCart = "Cart";
   static const String kOrders = "Orders";
+  static const String kVerification = "Verification";
+
   static const String kIMITATION = "IMITATION";
   static const String kYourCart = "Your Cart";
   static const String kMyOrders = "My Orders";
@@ -42,12 +46,17 @@ class Strings {
   static const List<String> svgIcons = [
     "assets/image/home.svg",
     "assets/image/shop.svg",
-    "assets/image/cart.svg",
+    // "assets/image/cart.svg",
     "assets/image/order.svg",
   ];
 
-  static const List<String> labels = [kHome, kShop, kCart, kOrders];
-  static const List<String> titledashboard = [kIMITATION, kYourCart, kMyOrders];
+  static const List<String> labels = [kHome, kOrders];
+  static const List<String> titledashboard = [
+    kWelcometoShivamStores,
+
+    // kIMITATION,
+    kMyOrders,
+  ];
   static const List<String> kOrderStatus = [kActive, kCompleted, kCancled];
 
   static const List homeData = [

@@ -38,7 +38,7 @@ class ButtonWidget extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: bgColor ?? AppColors.black1E1E1EColor,
-          borderRadius: BorderRadius.circular(borderRadius ?? 50),
+          borderRadius: BorderRadius.circular(borderRadius ?? 10),
         ),
         child: cText(
           value: title,

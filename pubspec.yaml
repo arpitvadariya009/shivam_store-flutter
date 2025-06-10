@@ -39,6 +39,14 @@ dependencies:
   connectivity_plus: ^6.1.4
   auto_size_text: ^3.0.0
   flutter_svg:
+  pin_code_fields:
+  video_player:
+  flutter_staggered_grid_view:
+  fluttertoast:
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  cached_network_image:
+  intl:
   
 
 dev_dependencies:

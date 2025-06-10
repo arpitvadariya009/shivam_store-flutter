@@ -14,43 +14,51 @@ class VerificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
-        leading: Container(),
-        elevation: 0,
-        title: cText(
-          value: Strings.kVerifying,
-          fontSize: 20,
-          color: AppColors.blackColor,
-          fontWeight: FontWeight.w600,
-        ),
-        centerTitle: true,
-      ),
 
       body: GestureDetector(
         onTap: () {
           Get.toNamed(AppRoutes.kDashboardScreen);
         },
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
+          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 50),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              cText(
-                value: Strings.kWellgetbacktoyoushortly,
-                color: AppColors.textPrimaryColor,
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    cText(
+                      value: Strings.kVerification,
+                      color: AppColors.textPrimaryColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      textAlign: TextAlign.center,
+                    ),
+                    AppSpacing.h16,
+                    cText(
+                      value: Strings.kWellgetbacktoyoushortly,
+                      color: AppColors.textPrimaryColor,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
+                      textAlign: TextAlign.start,
+                    ),
+                    AppSpacing.h10,
+
+                    cText(
+                      value: Strings.kWeareverifyingyourstore,
+                      color: AppColors.black505050Color,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-              AppSpacing.h32,
+              AppSpacing.w16,
               Flexible(child: Image.asset("assets/image/verifying.png")),
-              AppSpacing.h32,
-              cText(
-                value: Strings.kWeareverifyingyourstore,
-                color: AppColors.black505050Color,
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                textAlign: TextAlign.center,
-              ),
             ],
           ),
         ),

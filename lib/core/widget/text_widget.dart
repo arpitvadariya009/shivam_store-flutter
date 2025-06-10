@@ -19,6 +19,8 @@ Widget cText({
     textAlign: textAlign,
     maxFontSize: maxFontSize,
     minFontSize: minFontSize,
+    overflow: overflow,
+
     style: TextStyle(
       fontSize: fontSize,
       color: color ?? AppColors.blackColor,

@@ -4,9 +4,12 @@ import 'package:shivam_stores/view/auth/presentation/login_screen.dart';
 import 'package:shivam_stores/view/auth/presentation/register_screen.dart';
 import 'package:shivam_stores/view/dashboard/controller/dashboard_controller.dart';
 import 'package:shivam_stores/view/dashboard/presentation/dashboard_screen.dart';
-import 'package:shivam_stores/view/shop/controller/category_controller.dart';
-import 'package:shivam_stores/view/shop/presentation/category_detail_screen.dart';
+import 'package:shivam_stores/view/shop/controller/product_detail_controller.dart';
+import 'package:shivam_stores/view/shop/controller/shop_controller.dart';
+import 'package:shivam_stores/view/shop/controller/shop_detail_controller.dart';
+import 'package:shivam_stores/view/shop/presentation/product_detail_screen.dart';
 import 'package:shivam_stores/view/shop/presentation/shop_detail_screen.dart';
+import 'package:shivam_stores/view/shop/presentation/shop_screen.dart';
 import 'package:shivam_stores/view/splash/splash_screen.dart';
 import 'package:shivam_stores/view/verification/verification_screen.dart';
 
@@ -17,7 +20,8 @@ class AppRoutes {
   static const kVerificationScreen = '/VerificationScreen';
   static const kDashboardScreen = '/DashboardScreen';
   static const kShopDetailScreen = '/ShopDetailScreen';
-  static const kCategoryDetailScreen = '/CategoryDetailScreen';
+  static const kProductDetailScreen = '/ProductDetailScreen';
+  static const kShopScreen = '/ShopScreen';
 }
 
 class AppPages {
@@ -45,11 +49,17 @@ class AppPages {
     GetPage(
       name: AppRoutes.kShopDetailScreen,
       page: () => const ShopDetailScreen(),
+      binding: ShopDetailBindings(),
     ),
     GetPage(
-      name: AppRoutes.kCategoryDetailScreen,
-      page: () => const CategoryDetailScreen(),
-      binding: CategoryBindings(),
+      name: AppRoutes.kProductDetailScreen,
+      page: () => const ProductDetailScreen(),
+      binding: ProductDetailBindings(),
+    ),
+    GetPage(
+      name: AppRoutes.kShopScreen,
+      page: () => const ShopScreen(),
+      binding: ShopBindings(),
     ),
   ];
 }

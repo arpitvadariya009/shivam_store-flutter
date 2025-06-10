@@ -5,6 +5,7 @@ import 'package:shivam_stores/core/utils/app_colors.dart';
 import 'package:shivam_stores/core/utils/strings.dart';
 import 'package:shivam_stores/core/widget/text_widget.dart';
 import 'package:shivam_stores/view/dashboard/controller/dashboard_controller.dart';
+import 'package:shivam_stores/view/home/controller/home_controller.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -18,29 +19,39 @@ class DashboardScreen extends StatelessWidget {
           appBar: AppBar(
             surfaceTintColor: AppColors.whiteColor,
             leading: Container(),
+            leadingWidth: 0,
             backgroundColor: AppColors.whiteColor,
             elevation: 0,
-            title:
-                c.currentPage == 0
-                    ? null
-                    : cText(
-                      value: Strings.titledashboard[c.currentPage - 1],
-                      fontSize: 20,
-                      color: AppColors.blackColor,
-                      fontWeight: FontWeight.w600,
-                    ),
+            title: cText(
+              value: Strings.titledashboard[c.currentPage],
+              fontSize: 20,
+              color: AppColors.blackColor,
+              fontWeight: FontWeight.w600,
+              overflow: TextOverflow.clip,
+            ),
             centerTitle: true,
-            toolbarHeight: c.currentPage == 0 ? 20 : null,
           ),
           bottomNavigationBar: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             color: Colors.black,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(Strings.labels.length, (index) {
                 bool isSelected = c.currentPage == index;
                 return GestureDetector(
                   onTap: () {
+                    final homeController = Get.find<HomeController>();
+                    if (index == 0) {
+                      if (homeController.controller.value.isInitialized) {
+                        homeController.controller.play();
+                        homeController.update();
+                      }
+                    } else {
+                      if (homeController.controller.value.isInitialized) {
+                        homeController.controller.pause();
+                        homeController.update();
+                      }
+                    }
                     c.currentPage = index;
                     c.update();
                   },
