@@ -43,6 +43,56 @@ class LoginScreen extends StatelessWidget {
                 vertical: 16,
               ),
               children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: ButtonWidget(
+                          onTap: () {
+                            c.isStaff = !c.isStaff;
+                            c.update();
+                          },
+                          title: Strings.kStaff,
+                          bgColor:
+                              c.isStaff
+                                  ? AppColors.greenColor
+                                  : AppColors.whiteColor,
+                          border: Border.all(color: AppColors.blackColor),
+                          borderRadius: 0,
+                          fontSize: 14,
+                          height: 40,
+                          textcolor: AppColors.blackColor,
+                          leadingWidget: Image.asset('assets/image/staff.png'),
+                        ),
+                      ),
+                      AppSpacing.w10,
+                      Flexible(
+                        child: ButtonWidget(
+                          onTap: () {
+                            c.isStaff = !c.isStaff;
+                            c.update();
+                          },
+                          title: Strings.kCustomer,
+                          bgColor:
+                              !c.isStaff
+                                  ? AppColors.greenColor
+                                  : AppColors.whiteColor,
+                          border: Border.all(color: AppColors.blackColor),
+                          borderRadius: 0,
+                          fontSize: 14,
+                          height: 40,
+                          textcolor: AppColors.blackColor,
+                          leadingWidget: Image.asset(
+                            'assets/image/customer.png',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                AppSpacing.h24,
                 titleText(value: Strings.kMobileNumber),
                 textFormField(
                   controller: c.mobileTXTController,
@@ -88,13 +138,10 @@ class LoginScreen extends StatelessWidget {
                 ButtonWidget(
                   onTap: () async {
                     await c.login(context: context);
-
-                    // Get.toNamed(AppRoutes.kVerificationScreen);
                   },
                   title: Strings.kLogin,
                 ),
                 AppSpacing.h16,
-
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
@@ -112,8 +159,7 @@ class LoginScreen extends StatelessWidget {
                             TapGestureRecognizer()
                               ..onTap = () {
                                 c.clean();
-
-                                Get.back();
+                                Get.offNamed(AppRoutes.kRegisterScreen);
                               },
                         style: TextStyle(
                           decoration: TextDecoration.underline,

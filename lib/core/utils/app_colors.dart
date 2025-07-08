@@ -22,4 +22,6 @@ class AppColors {
   static const Color silver888888Color = Color(0xff888888);
   static const Color greenColor = Color(0xff4EFF3E);
   static const Color darkGreenColor = Color(0xff003615);
+  static const Color frizBlueColor = Color(0xff8997FF);
+  static const Color frizYellowColor = Color(0xffE09900);
 }

@@ -3,17 +3,13 @@ import 'package:get/get.dart';
 
 import 'package:shivam_stores/view/home/controller/home_controller.dart';
 import 'package:shivam_stores/view/home/presentation/home_screen.dart';
-import 'package:shivam_stores/view/orders/controller/orders_controller.dart';
+
 import 'package:shivam_stores/view/orders/presentation/orders_screen.dart';
+import 'package:shivam_stores/view/profile/presentation/profile_screen.dart';
 
 class DashboardController extends GetxController {
   int currentPage = 0;
-  final List<Widget> screens = [
-    HomeScreen(),
-    // ShopScreen(),
-    // CartScreen(),
-    OrdersScreen(),
-  ];
+  final List<Widget> screens = [HomeScreen(), OrdersScreen(), ProfileScreen()];
 
   @override
   void onInit() {
@@ -24,8 +20,7 @@ class DashboardController extends GetxController {
 class DashboardBindings extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => DashboardController());
-    Get.lazyPut(() => OrdersController());
-    Get.lazyPut(() => HomeController());
+    Get.put(DashboardController());
+    Get.put(HomeController());
   }
 }

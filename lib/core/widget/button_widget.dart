@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shivam_stores/core/utils/app_colors.dart';
+import 'package:shivam_stores/core/widget/spacing.dart';
 import 'package:shivam_stores/core/widget/text_widget.dart';
 
 class ButtonWidget extends StatelessWidget {
@@ -13,6 +14,8 @@ class ButtonWidget extends StatelessWidget {
   final double? borderRadius;
   final double? width;
   final FontWeight? fontWeight;
+  final BoxBorder? border;
+  final Widget? leadingWidget;
   const ButtonWidget({
     Key? key,
     required this.onTap,
@@ -24,6 +27,8 @@ class ButtonWidget extends StatelessWidget {
     this.fontSize,
     this.width,
     this.fontWeight,
+    this.border,
+    this.leadingWidget,
   }) : super(key: key);
 
   @override
@@ -37,17 +42,38 @@ class ButtonWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.center,
         decoration: BoxDecoration(
+          border: border,
           color: bgColor ?? AppColors.black1E1E1EColor,
           borderRadius: BorderRadius.circular(borderRadius ?? 10),
         ),
-        child: cText(
-          value: title,
-          textAlign: TextAlign.center,
-          fontSize: fontSize ?? 16,
-          color: textcolor ?? AppColors.whiteColor,
-          fontWeight: fontWeight ?? FontWeight.w600,
-          overflow: TextOverflow.ellipsis,
-        ),
+        child:
+            leadingWidget != null
+                ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    leadingWidget ?? Container(),
+                    AppSpacing.w10,
+                    Flexible(
+                      child: cText(
+                        value: title,
+                        textAlign: TextAlign.center,
+                        fontSize: fontSize ?? 16,
+                        color: textcolor ?? AppColors.whiteColor,
+                        fontWeight: fontWeight ?? FontWeight.w600,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                )
+                : cText(
+                  value: title,
+                  textAlign: TextAlign.center,
+                  fontSize: fontSize ?? 16,
+                  color: textcolor ?? AppColors.whiteColor,
+                  fontWeight: fontWeight ?? FontWeight.w600,
+                  overflow: TextOverflow.ellipsis,
+                ),
       ),
     );
   }

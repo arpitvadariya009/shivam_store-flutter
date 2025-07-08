@@ -12,4 +12,5 @@ class ApiEndpoints {
   static const String groupedOrders = "grouped-orders";
   static const String getProducts = "get/products";
   static const String product = "product";
+  static const String updateOrder = "update/order";
 }

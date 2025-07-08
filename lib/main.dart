@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData(fontFamily: "Poppins"),
-      initialRoute: AppRoutes.kLoginScreen,
+      initialRoute: AppRoutes.kSplashScreen,
       getPages: AppPages.pages,
       debugShowCheckedModeBanner: false,
     );

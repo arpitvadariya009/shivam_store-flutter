@@ -179,7 +179,7 @@ class ApiService extends GetxService {
       case DioExceptionType.cancel:
         return 'Request cancelled';
       case DioExceptionType.connectionError:
-        return 'No internet connection';
+        return '${error.message}';
       default:
         return 'Something went wrong';
     }

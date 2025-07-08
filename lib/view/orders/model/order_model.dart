@@ -21,12 +21,16 @@ class OrderModel {
 }
 
 class OrderData {
+  String? id;
+  var status;
   DateTime? date;
   List<String>? products;
 
-  OrderData({this.date, this.products});
+  OrderData({this.date, this.products, this.id, this.status});
 
   factory OrderData.fromJson(Map<String, dynamic> json) => OrderData(
+    id: json["id"],
+    status: json["status"],
     date: DateTime.parse(json["date"]),
     products:
         json["products"] == null
@@ -35,6 +39,8 @@ class OrderData {
   );
 
   Map<String, dynamic> toJson() => {
+    "id": id,
+    "status": status,
     "date": date?.toIso8601String(),
     "products": List<dynamic>.from(products!.map((x) => x)),
   };

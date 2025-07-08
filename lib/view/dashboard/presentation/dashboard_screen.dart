@@ -6,6 +6,7 @@ import 'package:shivam_stores/core/utils/strings.dart';
 import 'package:shivam_stores/core/widget/text_widget.dart';
 import 'package:shivam_stores/view/dashboard/controller/dashboard_controller.dart';
 import 'package:shivam_stores/view/home/controller/home_controller.dart';
+import 'package:shivam_stores/view/orders/controller/orders_controller.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -52,6 +53,7 @@ class DashboardScreen extends StatelessWidget {
                         homeController.update();
                       }
                     }
+
                     c.currentPage = index;
                     c.update();
                   },

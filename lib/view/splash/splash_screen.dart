@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:shivam_stores/core/routes/app_routes.dart';
 import 'package:shivam_stores/core/utils/app_colors.dart';
 import 'package:shivam_stores/core/widget/spacing.dart';
+import 'package:shivam_stores/services/hive_service.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,11 +16,13 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
-
-    Future.delayed(Duration(seconds: 3), () {
-      Get.offAllNamed(AppRoutes.kRegisterScreen);
-    });
+    // Future.delayed(Duration(seconds: 3), () {
+    //   if (HiveService().getValue(HiveService.userId) == null) {
+    //     Get.offAllNamed(AppRoutes.kRegisterScreen);
+    //   } else {
+    //     Get.offAllNamed(AppRoutes.kDashboardScreen);
+    //   }
+    // });
 
     super.initState();
   }
@@ -27,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Conta(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

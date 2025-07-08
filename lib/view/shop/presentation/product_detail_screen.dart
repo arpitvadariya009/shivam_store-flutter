@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
+import 'package:shivam_stores/core/routes/app_routes.dart';
 import 'package:shivam_stores/core/utils/app_colors.dart';
 import 'package:shivam_stores/core/widget/api_state_manage.dart';
 import 'package:shivam_stores/core/widget/button_widget.dart';
 import 'package:shivam_stores/core/widget/image.dart';
 import 'package:shivam_stores/core/widget/spacing.dart';
 import 'package:shivam_stores/core/widget/text_widget.dart';
+import 'package:shivam_stores/view/dashboard/controller/dashboard_controller.dart';
+import 'package:shivam_stores/view/home/controller/home_controller.dart';
 import 'package:shivam_stores/view/shop/controller/product_detail_controller.dart';
 import 'package:shivam_stores/view/shop/model/product_detail_model.dart';
 
@@ -92,9 +96,13 @@ class ProductDetailScreen extends StatelessWidget {
                           AppSpacing.h24,
 
                           ButtonWidget(
-                            onTap: () {},
-                            title:
-                                "${product?.variants?.fold(0, (sum, variant) => sum + (variant.qty ?? 0)) ?? 0} pcs added",
+                            onTap: () {
+                              Get.find<HomeController>().controller.pause();
+
+                              Get.find<DashboardController>().currentPage = 1;
+                              Get.offNamed(AppRoutes.kDashboardScreen);
+                            },
+                            title: "Check Orders",
                             textcolor: AppColors.blackColor,
                             bgColor: AppColors.greenColor,
                           ),

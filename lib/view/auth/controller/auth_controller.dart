@@ -21,6 +21,7 @@ class AuthController extends GetxController {
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   TextEditingController pinTXTController = TextEditingController();
   bool isPasswordValid = false;
+  bool isStaff = true;
   bool isPivacyValid = false;
   final ApiService _apiService = ApiService.instance;
   ApiResponse<UserModel?> userModel = ApiResponse<UserModel?>();
@@ -84,6 +85,13 @@ class AuthController extends GetxController {
             HiveService.userId,
             userModel.data?.data?.id,
           );
+          await HiveService().setValue(HiveService.isStaff, isStaff);
+
+          await HiveService().setValue(
+            HiveService.userData,
+            jsonEncode(userModel.data?.data?.toJson()),
+          );
+
           clean();
           if (userModel.data?.data?.isverified == true) {
             Get.offNamed(AppRoutes.kDashboardScreen);

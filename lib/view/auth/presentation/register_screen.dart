@@ -34,6 +34,14 @@ class RegisterScreen extends StatelessWidget {
         centerTitle: true,
       ),
 
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.offNamed(AppRoutes.kLoginScreen);
+        },
+        backgroundColor: AppColors.blackColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+      ),
+
       body: GetBuilder<AuthController>(
         builder: (c) {
           return Form(
@@ -154,7 +162,6 @@ class RegisterScreen extends StatelessWidget {
                   child: ButtonWidget(
                     width: 200,
                     onTap: () async {
-                      c.clean();
                       await c.register(context: context);
                     },
                     title: Strings.kRegister,
@@ -178,8 +185,9 @@ class RegisterScreen extends StatelessWidget {
                         recognizer:
                             TapGestureRecognizer()
                               ..onTap = () {
-                                Get.toNamed(AppRoutes.kLoginScreen);
-                                Get.find<AuthController>().clean();
+                                c.clean();
+
+                                Get.offNamed(AppRoutes.kLoginScreen);
                               },
                         style: TextStyle(
                           decoration: TextDecoration.underline,

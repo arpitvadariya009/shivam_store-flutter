@@ -1,3 +1,5 @@
+import 'package:shivam_stores/services/hive_service.dart';
+
 class Strings {
   static const String kRegisterNow = "Register Now!";
   static const String kFirmName = "Firm Name";
@@ -39,23 +41,41 @@ class Strings {
   static const String kIMITATION = "IMITATION";
   static const String kYourCart = "Your Cart";
   static const String kMyOrders = "My Orders";
+  static const String kAccount = "Account";
   static const String kCancled = "Cancled";
   static const String kActive = "Active";
+  static const String kProfile = "Profile";
   static const String kCompleted = "Completed";
+  static const String kProducts = "Products";
   static const String kTrackStatus = "Track Status";
+  static const String kStaff = "Staff";
+  static const String kCustomer = "Customer";
+  static const String kManageOrders = "Manage Orders";
+  static const String kStatusUpdate = "Status Update";
+  static const String kInProcess = "In Process";
+  static const String kOutforDelivery = "Out for Delivery";
+  static const String kDelivered = "Delivered";
+
+  static const String kUpdate = "Update";
+  static const String kPending = "Pending";
+  static const String kDone = "Done";
   static const List<String> svgIcons = [
     "assets/image/home.svg",
-    "assets/image/shop.svg",
-    // "assets/image/cart.svg",
     "assets/image/order.svg",
+    "assets/image/profile.svg",
+  ];
+  static const List<Map> status = [
+    {'status': kInProcess, 'id': '1'},
+    {'status': kDone, 'id': '2'},
   ];
 
-  static const List<String> labels = [kHome, kOrders];
-  static const List<String> titledashboard = [
+  static List<String> labels = [kHome, kOrders, kAccount];
+  static List<String> titledashboard = [
     kWelcometoShivamStores,
-
-    // kIMITATION,
-    kMyOrders,
+    HiveService().getValue(HiveService.isStaff) == true
+        ? Strings.kManageOrders
+        : kMyOrders,
+    kProfile,
   ];
   static const List<String> kOrderStatus = [kActive, kCompleted, kCancled];
 
