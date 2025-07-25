@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shivam_stores/core/routes/app_routes.dart';
+import 'package:shivam_stores/core/utils/app_colors.dart';
 import 'package:shivam_stores/services/api_services.dart';
 import 'package:shivam_stores/services/hive_service.dart';
 
@@ -27,6 +28,20 @@ class MyApp extends StatelessWidget {
       initialRoute: AppRoutes.kSplashScreen,
       getPages: AppPages.pages,
       debugShowCheckedModeBanner: false,
+
+      builder: (context, child) {
+        return Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.navyBlueColor, AppColors.darkBlueColor],
+
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: child,
+        );
+      },
     );
   }
 }

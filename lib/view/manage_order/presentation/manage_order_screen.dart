@@ -1,0 +1,306 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shivam_stores/core/utils/app_colors.dart';
+import 'package:shivam_stores/core/utils/strings.dart';
+import 'package:shivam_stores/core/widget/button_widget.dart';
+import 'package:shivam_stores/core/widget/spacing.dart';
+import 'package:shivam_stores/core/widget/text_widget.dart';
+import 'package:shivam_stores/view/manage_order/controller/manage_order_controller.dart';
+
+class ManageOrderScreen extends StatelessWidget {
+  const ManageOrderScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return Scaffold(
+      backgroundColor: AppColors.button2C0203Color,
+      appBar: AppBar(
+        surfaceTintColor: AppColors.button2C0203Color,
+
+        leading: Container(),
+        leadingWidth: 0,
+        toolbarHeight: 40,
+        backgroundColor: AppColors.button2C0203Color,
+        elevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: cText(
+                  value: 'MANAGE ORDERS',
+                  fontSize: 20,
+                  color: AppColors.whiteColor,
+                  fontWeight: FontWeight.w500,
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+              Flexible(
+                child: cText(
+                  value: 'S H I V A M',
+                  fontSize: 20,
+                  color: AppColors.whiteColor,
+
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: GetBuilder<ManageOrderController>(
+        builder: (c) {
+          return Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.button2C0203Color, AppColors.blackColor],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      spacing: 10,
+                      children: [
+                        ButtonWidget(
+                          onTap: () {
+                            c.buttonIndex = 0;
+                            c.update();
+                          },
+                          title: 'TODAY',
+                          width: 80,
+                          height: 40,
+                          textcolor:
+                              c.buttonIndex == 0
+                                  ? AppColors.blackColor
+                                  : AppColors.whiteColor,
+                          bgColor:
+                              c.buttonIndex == 0
+                                  ? AppColors.buttonFFAE00Color
+                                  : AppColors.whiteColor.withOpacity(0.4),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+
+                        ButtonWidget(
+                          onTap: () {
+                            c.buttonIndex = 1;
+                            c.update();
+                          },
+                          title: 'YESTERDAY',
+                          width: 100,
+                          height: 40,
+                          textcolor:
+                              c.buttonIndex == 1
+                                  ? AppColors.blackColor
+                                  : AppColors.whiteColor,
+                          bgColor:
+                              c.buttonIndex == 1
+                                  ? AppColors.buttonFFAE00Color
+                                  : AppColors.whiteColor.withOpacity(0.4),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        AppSpacing.w32,
+
+                        ButtonWidget(
+                          onTap: () {
+                            c.buttonIndex = 2;
+                            c.update();
+                          },
+                          title: 'PENDING',
+                          width: 100,
+                          height: 40,
+                          textcolor:
+                              c.buttonIndex == 2
+                                  ? AppColors.blackColor
+                                  : AppColors.whiteColor,
+                          bgColor:
+                              c.buttonIndex == 2
+                                  ? AppColors.buttonFFAE00Color
+                                  : AppColors.whiteColor.withOpacity(0.4),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        AppSpacing.w32,
+
+                        ButtonWidget(
+                          onTap: () {
+                            c.buttonIndex = 3;
+                            c.update();
+                          },
+                          title: 'COSMETIC',
+                          width: 100,
+                          height: 40,
+                          textcolor:
+                              c.buttonIndex == 3
+                                  ? AppColors.blackColor
+                                  : AppColors.whiteColor,
+                          bgColor:
+                              c.buttonIndex == 3
+                                  ? AppColors.buttonFFAE00Color
+                                  : AppColors.whiteColor.withOpacity(0.4),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+
+                        ButtonWidget(
+                          onTap: () {
+                            c.buttonIndex = 4;
+                            c.update();
+                          },
+                          title: 'IMITATION',
+                          width: 100,
+                          height: 40,
+                          textcolor:
+                              c.buttonIndex == 4
+                                  ? AppColors.blackColor
+                                  : AppColors.whiteColor,
+                          bgColor:
+                              c.buttonIndex == 4
+                                  ? AppColors.buttonFFAE00Color
+                                  : AppColors.whiteColor.withOpacity(0.4),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        ButtonWidget(
+                          onTap: () {
+                            c.buttonIndex = 5;
+                            c.update();
+                          },
+                          title: 'HAIR ACC.',
+                          width: 100,
+                          height: 40,
+                          textcolor:
+                              c.buttonIndex == 5
+                                  ? AppColors.blackColor
+                                  : AppColors.whiteColor,
+                          bgColor:
+                              c.buttonIndex == 5
+                                  ? AppColors.buttonFFAE00Color
+                                  : AppColors.whiteColor.withOpacity(0.4),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: 3,
+
+                    padding: EdgeInsets.all(15),
+                    itemBuilder: (context, index) {
+                      return Container(
+                        width: double.infinity,
+                        height: 42,
+                        margin: EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                          color:
+                              index % 2 != 0
+                                  ? AppColors.buttonFFADCBColor.withOpacity(0.7)
+                                  : AppColors.buttonFFDEDFColor.withOpacity(
+                                    0.7,
+                                  ),
+                        ),
+
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              cText(
+                                value: "05-06-2025",
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              AppSpacing.w50,
+                              cText(
+                                value: "AHMEDABAD",
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+
+                              AppSpacing.w10,
+                              Container(
+                                width: width * 0.5,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  gradient: LinearGradient(
+                                    colors:
+                                        index == 0
+                                            ? [
+                                              AppColors.buttonAC9017Color,
+                                              AppColors.button4D410AColor
+                                                  .withOpacity(0.1),
+                                            ]
+                                            : index == 1
+                                            ? [
+                                              AppColors.button17AC9DColor,
+                                              AppColors.button4D410AColor
+                                                  .withOpacity(0.1),
+                                            ]
+                                            : [
+                                              AppColors.button24AC17Color,
+                                              AppColors.button4D410AColor
+                                                  .withOpacity(0.1),
+                                            ],
+                                  ),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    AppSpacing.w16,
+                                    cText(
+                                      value: 'Imitation ',
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    cText(
+                                      value: 'KAHAI JEWELS',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              AppSpacing.w10,
+                              ButtonWidget(
+                                height: 36,
+                                onTap: () {},
+                                title: Strings.kPending,
+                                bgColor: AppColors.buttonFFAE00Color,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                textcolor: AppColors.blackColor,
+                                border: Border.all(color: AppColors.blackColor),
+                              ),
+                              AppSpacing.w10,
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

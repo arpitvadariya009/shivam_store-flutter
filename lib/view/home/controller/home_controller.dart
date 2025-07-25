@@ -35,6 +35,7 @@ class HomeController extends GetxController {
   void pause() {
     if (controller.value.isInitialized && controller.value.isPlaying) {
       controller.pause();
+      update();
     }
   }
 
@@ -61,5 +62,13 @@ class HomeController extends GetxController {
   void onClose() {
     controller.dispose();
     super.onClose();
+  }
+}
+
+class HomeBindings extends Bindings {
+  @override
+  void dependencies() {
+    // TODO: implement dependencies
+    Get.lazyPut(() => HomeController());
   }
 }

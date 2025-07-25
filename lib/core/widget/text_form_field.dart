@@ -14,6 +14,7 @@ Widget textFormField({
   String? Function(String?)? validator,
   List<TextInputFormatter>? inputFormatters,
   bool obscureText = false,
+  Color? fillColor,
 }) {
   return TextFormField(
     controller: controller,
@@ -34,7 +35,7 @@ Widget textFormField({
       hintStyle: TextStyle(color: AppColors.hintColor, fontSize: 12),
       suffixIcon: suffixIcon,
       prefixIcon: prefixIcon,
-      fillColor: AppColors.textFieldBgColor,
+      fillColor: fillColor ?? AppColors.textFieldBgColor,
       filled: true,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),

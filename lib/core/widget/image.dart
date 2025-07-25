@@ -14,6 +14,8 @@ Widget netWorkImage({required String imageUrl, BoxFit? fit}) {
             color: AppColors.blackColor,
           ),
         ),
-    errorWidget: (context, url, error) => Icon(Icons.error),
+    errorWidget:
+        (context, url, error) =>
+            Image.asset('assets/image/image_cart.png', fit: fit),
   );
 }

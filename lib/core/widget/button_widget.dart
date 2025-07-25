@@ -16,6 +16,8 @@ class ButtonWidget extends StatelessWidget {
   final FontWeight? fontWeight;
   final BoxBorder? border;
   final Widget? leadingWidget;
+  final Gradient? gradient;
+  final DecorationImage? image;
   const ButtonWidget({
     Key? key,
     required this.onTap,
@@ -29,6 +31,8 @@ class ButtonWidget extends StatelessWidget {
     this.fontWeight,
     this.border,
     this.leadingWidget,
+    this.gradient,
+    this.image,
   }) : super(key: key);
 
   @override
@@ -37,13 +41,15 @@ class ButtonWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: height ?? 50,
-
         width: width,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.center,
         decoration: BoxDecoration(
+          image: image,
           border: border,
-          color: bgColor ?? AppColors.black1E1E1EColor,
+          color: bgColor,
+
+          gradient: gradient,
           borderRadius: BorderRadius.circular(borderRadius ?? 10),
         ),
         child:

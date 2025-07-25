@@ -9,7 +9,9 @@ import 'package:shivam_stores/core/widget/image.dart';
 import 'package:shivam_stores/core/widget/spacing.dart';
 import 'package:shivam_stores/core/widget/text_widget.dart';
 import 'package:shivam_stores/view/home/model/categories_model.dart';
+import 'package:shivam_stores/view/shop/controller/shop_controller.dart';
 import 'package:shivam_stores/view/shop/controller/shop_detail_controller.dart';
+import 'package:shivam_stores/view/shop/model/product_detail_model.dart';
 
 class ShopDetailScreen extends StatelessWidget {
   const ShopDetailScreen({super.key});
@@ -17,87 +19,128 @@ class ShopDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            Get.back();
-          },
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: AppColors.blackColor,
+        leading: Container(),
+        leadingWidth: 0,
+        toolbarHeight: 40,
+        backgroundColor: Get.find<ShopDetailController>().bgColor,
+        surfaceTintColor: Get.find<ShopDetailController>().bgColor,
+        elevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: cText(
+                  value: Get.find<ShopDetailController>().title ?? "",
+                  fontSize: 20,
+                  color:
+                      Get.find<ShopDetailController>().textColor ??
+                      AppColors.whiteColor,
+                  fontWeight: FontWeight.w500,
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+              Flexible(
+                child: cText(
+                  value: 'S H I V A M',
+                  fontSize: 20,
+                  color:
+                      Get.find<ShopDetailController>().textColor ??
+                      AppColors.whiteColor,
+
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+            ],
           ),
         ),
-        backgroundColor: AppColors.whiteColor,
-        surfaceTintColor: AppColors.whiteColor,
-        elevation: 0,
-        title: cText(
-          value: Get.find<ShopDetailController>().title,
-          fontSize: 20,
-          color: AppColors.blackColor,
-          fontWeight: FontWeight.w600,
-        ),
+
         centerTitle: true,
       ),
 
-      body: GetBuilder<ShopDetailController>(
-        builder: (c) {
-          return ApiStateWidget<CategoriesModel?>(
-            response: c.productsModel,
-            dataBuilder: (data) {
-              return OrientationBuilder(
-                builder: (context, orientation) {
-                  return MasonryGridView.count(
-                    crossAxisCount:
-                        orientation == Orientation.landscape ? 4 : 2,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 10,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 16,
-                    ),
-                    itemCount: data?.data?.length,
-                    itemBuilder: (context, index) {
-                      final product = data?.data?[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Get.toNamed(
-                            AppRoutes.kProductDetailScreen,
-                            arguments: {'id': product?.id ?? ""},
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: AppColors.boxBgColor,
-                            borderRadius: BorderRadius.circular(10),
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration:
+            Get.find<ShopDetailController>().title == "FAVORITE"
+                ? BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.yellow394002CColor,
+                      AppColors.blackColor,
+                    ],
+
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                )
+                : null,
+        child: GetBuilder<ShopDetailController>(
+          builder: (c) {
+            return ApiStateWidget<ProductsDetailModel?>(
+              response: c.productsModel,
+              dataBuilder: (data) {
+                return OrientationBuilder(
+                  builder: (context, orientation) {
+                    return MasonryGridView.count(
+                      crossAxisCount:
+                          orientation == Orientation.landscape ? 3 : 2,
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 60,
+                        vertical: 16,
+                      ),
+                      itemCount: data?.data?.length,
+                      itemBuilder: (context, index) {
+                        final product = data?.data?[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              AppRoutes.kProductDetailScreen,
+                              arguments: {
+                                'index': index,
+                                'id': product?.id ?? "",
+                                'title':
+                                    "${Get.find<ShopDetailController>().title == "FAVORITE" ? Get.find<ShopDetailController>().title : "${Get.find<ShopController>().title.toUpperCase()} / ${Get.find<ShopDetailController>().title} "} / ${product?.code ?? ""}",
+                                // "${Get.find<ShopController>().title.toUpperCase()} / ${Get.find<ShopDetailController>().title} / ${product?.code ?? ""}",
+                                'bgColor':
+                                    Get.find<ShopDetailController>().title ==
+                                            "FAVORITE"
+                                        ? Get.find<ShopDetailController>()
+                                            .bgColor
+                                        : Colors.transparent,
+                                'textColor':
+                                    Get.find<ShopDetailController>().title ==
+                                            "FAVORITE"
+                                        ? Get.find<ShopDetailController>()
+                                            .textColor
+                                        : AppColors.whiteColor,
+                              },
+                            );
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.height * 0.32,
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: AppColors.whiteColor.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: netWorkImage(imageUrl: product?.image ?? ""),
                           ),
-                          child: Column(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: netWorkImage(
-                                  imageUrl: product?.image ?? "",
-                                ),
-                              ),
-                              AppSpacing.h5,
-                              cText(
-                                value: product?.code ?? "",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.blackColor,
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              );
-            },
-          );
-        },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

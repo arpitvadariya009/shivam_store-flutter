@@ -1,30 +1,64 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shivam_stores/model/api_response_model.dart';
 import 'package:shivam_stores/services/api_endpoints.dart';
 import 'package:shivam_stores/services/api_services.dart';
+import 'package:shivam_stores/services/hive_service.dart';
 import 'package:shivam_stores/view/home/model/categories_model.dart';
+import 'package:shivam_stores/view/shop/model/product_detail_model.dart';
+
+import '../../../core/utils/app_colors.dart';
 
 class ShopDetailController extends GetxController {
+  ShopDetailController({this.id, this.title, this.bgColor});
   final ApiService _apiService = ApiService.instance;
-  ApiResponse<CategoriesModel?> productsModel = ApiResponse<CategoriesModel?>();
-
-  String id = "";
-  String title = "";
+  ApiResponse<ProductsDetailModel?> productsModel =
+      ApiResponse<ProductsDetailModel?>();
+  Color? bgColor = Colors.transparent;
+  Color? textColor = AppColors.whiteColor;
+  String? id = "";
+  String? title = "";
   @override
   void onInit() {
-    id = Get.arguments['id'];
-    title = Get.arguments['title'];
-    fetchProduct();
+    try {
+      id = Get.arguments['id'];
+      title = Get.arguments['title'];
+      bgColor = Get.arguments['bgColor'];
+      textColor = Get.arguments['textColor'];
+    } catch (e) {}
+
+    if (title == "FAVORITE") {
+      fetchFavProduct();
+    } else {
+      fetchProduct();
+    }
+    log("---------------id---->${id}");
+    log("---------------title---->${title}");
     super.onInit();
   }
 
-  Future<void> fetchProduct() async {
-    productsModel = ApiResponse<CategoriesModel>().loading();
+  Future<void> fetchFavProduct() async {
+    productsModel = ApiResponse<ProductsDetailModel>().loading();
     update(); // Update UI to show loading
 
-    final response = await _apiService.get<CategoriesModel?>(
+    final response = await _apiService.get<ProductsDetailModel?>(
+      '${ApiEndpoints.getFavorite}${HiveService().getValue(HiveService.userId)}',
+      parser: (data) => ProductsDetailModel.fromJson(data),
+    );
+
+    productsModel = response;
+    update(); // Update UI with data or error
+  }
+
+  Future<void> fetchProduct() async {
+    productsModel = ApiResponse<ProductsDetailModel>().loading();
+    update(); // Update UI to show loading
+
+    final response = await _apiService.get<ProductsDetailModel?>(
       '${ApiEndpoints.getProducts}?subCategoryId=$id',
-      parser: (data) => CategoriesModel.fromJson(data),
+      parser: (data) => ProductsDetailModel.fromJson(data),
     );
 
     productsModel = response;

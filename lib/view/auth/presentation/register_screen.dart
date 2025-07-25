@@ -17,189 +17,163 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: Colors.transparent, // ✅ Important
       appBar: AppBar(
         leading: Container(),
-        surfaceTintColor: AppColors.whiteColor,
-
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
-        title: cText(
-          value: Strings.kRegisterNow,
-          fontSize: 20,
-          color: AppColors.blackColor,
-          fontWeight: FontWeight.w600,
-        ),
-        centerTitle: true,
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.offNamed(AppRoutes.kLoginScreen);
-        },
-        backgroundColor: AppColors.blackColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+        toolbarHeight: 0,
       ),
 
       body: GetBuilder<AuthController>(
         builder: (c) {
-          return Form(
-            key: c.registerFormKey,
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          titleText(value: Strings.kFirmName),
-                          textFormField(
-                            controller: c.firmNameTXTController,
-                            hintText: Strings.kEnter + Strings.kFirmName,
-                            validator:
-                                (value) => Validators.validate(
-                                  value,
-                                  Strings.kFirmName,
-                                ),
-                          ),
-
-                          AppSpacing.h10,
-
-                          titleText(value: Strings.kMobileNumber),
-                          textFormField(
-                            controller: c.mobileTXTController,
-                            validator: Validators.validateMobile,
-                            hintText: Strings.kEnteryour10digitnumber,
-                            keyboardType: TextInputType.phone,
-                            prefixIcon: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                AppSpacing.w10,
-                                Text(
-                                  '+91',
-                                  style: TextStyle(
-                                    color: AppColors.blackColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              LengthLimitingTextInputFormatter(10),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    AppSpacing.w24,
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-
-                        children: [
-                          titleText(value: Strings.kCity),
-                          textFormField(
-                            controller: c.cityTXTController,
-                            hintText: Strings.kEnter + Strings.kCity,
-                            validator:
-                                (value) =>
-                                    Validators.validate(value, Strings.kCity),
-                          ),
-                          AppSpacing.h10,
-
-                          titleText(value: Strings.kPIN),
-                          pinTextField(
-                            length: 4,
-                            appContext: context,
-                            controller: c.pinTXTController,
-                            validator:
-                                (value) =>
-                                    Validators.validate(value, Strings.kPIN),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-
-                AppSpacing.h24,
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Checkbox(
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      visualDensity: VisualDensity.compact,
-                      splashRadius: 0,
-                      activeColor: AppColors.blackColor,
-                      value: c.isPivacyValid,
-                      onChanged: (val) {
-                        c.isPivacyValid = val ?? false;
-                        c.update();
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                    Flexible(
-                      child: cText(
-                        value: Strings.kIAgreewithTermPrivcy,
-                        color: AppColors.blackColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                AppSpacing.h16,
-                Center(
-                  child: ButtonWidget(
-                    width: 200,
-                    onTap: () async {
-                      await c.register(context: context);
-                    },
-                    title: Strings.kRegister,
-                  ),
-                ),
-                AppSpacing.h16,
-
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
+          return Center(
+            child: Form(
+              key: c.registerFormKey,
+              child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextSpan(
-                        text: Strings.kAlreadyhaveanaccount,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppColors.blackColor,
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+
+                          children: [
+                            titleText(value: Strings.kCity),
+                            textFormField(
+                              controller: c.cityTXTController,
+                              hintText: Strings.kEnter + Strings.kCity,
+                              validator:
+                                  (value) =>
+                                      Validators.validate(value, Strings.kCity),
+                            ),
+                          ],
                         ),
                       ),
-                      TextSpan(
-                        text: Strings.kSignIn,
-                        recognizer:
-                            TapGestureRecognizer()
-                              ..onTap = () {
-                                c.clean();
 
-                                Get.offNamed(AppRoutes.kLoginScreen);
-                              },
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          fontSize: 14,
-                          color: AppColors.blackColor,
-                          fontWeight: FontWeight.bold,
+                      AppSpacing.w24,
+
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+
+                          children: [
+                            titleText(value: Strings.kFirmName),
+                            textFormField(
+                              controller: c.firmNameTXTController,
+                              hintText: Strings.kEnter + Strings.kFirmName,
+                              validator:
+                                  (value) => Validators.validate(
+                                    value,
+                                    Strings.kFirmName,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      AppSpacing.w24,
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+
+                          children: [
+                            titleText(value: Strings.kPIN),
+                            pinTextField(
+                              length: 4,
+                              appContext: context,
+                              controller: c.pinTXTController,
+                              validator:
+                                  (value) =>
+                                      Validators.validate(value, Strings.kPIN),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  AppSpacing.h24,
+
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            titleText(value: Strings.kMobileNumber),
+                            textFormField(
+                              controller: c.mobileTXTController,
+                              validator: Validators.validateMobile,
+                              hintText: Strings.kEnteryour10digitnumber,
+                              keyboardType: TextInputType.phone,
+                              prefixIcon: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  AppSpacing.w10,
+                                  Text(
+                                    '+91',
+                                    style: TextStyle(
+                                      color: AppColors.blackColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(10),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      AppSpacing.w24,
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            titleText(value: Strings.kUserName),
+                            textFormField(
+                              controller: c.usetNameTXTController,
+                              hintText: Strings.kEnter + Strings.kUserName,
+                              validator:
+                                  (value) => Validators.validate(
+                                    value,
+                                    Strings.kUserName,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      AppSpacing.w24,
+
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: ButtonWidget(
+                            width: width * 0.2,
+                            bgColor: AppColors.darkPurpuleColor,
+                            onTap: () async {
+                              c.register(context: context);
+                            },
+                            title: Strings.kRegister,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },

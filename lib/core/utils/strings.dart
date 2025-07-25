@@ -1,8 +1,12 @@
+import 'package:flutter/widgets.dart';
+import 'package:shivam_stores/core/utils/app_colors.dart';
 import 'package:shivam_stores/services/hive_service.dart';
 
 class Strings {
   static const String kRegisterNow = "Register Now!";
-  static const String kFirmName = "Firm Name";
+  static const String kWelcomeBack = "Welcome Back!";
+
+  static const String kFirmName = "Shop Name";
   static const String kCity = "City";
   static const String kMobileNumber = "Mobile Number";
   static const String kPIN = "PIN";
@@ -17,6 +21,7 @@ class Strings {
   static const String kHIDE = "HIDE";
   static const String kLoginNow = "Login Now!";
   static const String kLogin = "Login";
+  static const String kUserName = "User Name";
   static const String kPleaseacceptthePrivacyPolicytocontinue =
       "Please accept the Privacy Policy to continue.";
   static const String kDonthaveanaccountSignUp = "Don’t have an account? ";
@@ -59,17 +64,48 @@ class Strings {
   static const String kUpdate = "Update";
   static const String kPending = "Pending";
   static const String kDone = "Done";
-  static const List<String> svgIcons = [
-    "assets/image/home.svg",
-    "assets/image/order.svg",
-    "assets/image/profile.svg",
-  ];
+  static const String kFavorite = "Favorite";
+
   static const List<Map> status = [
     {'status': kInProcess, 'id': '1'},
     {'status': kDone, 'id': '2'},
   ];
 
-  static List<String> labels = [kHome, kOrders, kAccount];
+  // static List labels = [kFavorite, kCart, kOrders, kProfile];
+  static List labels = [
+    {
+      'name': kProfile,
+      'color': LinearGradient(
+        end: Alignment.bottomCenter,
+        begin: Alignment.topCenter,
+        colors: [AppColors.powderGreenColor, AppColors.green00FF2BColor],
+      ),
+    },
+    {
+      'name': kOrders,
+      'color': LinearGradient(
+        end: Alignment.bottomCenter,
+        begin: Alignment.topCenter,
+        colors: [AppColors.powderPurpleColor, AppColors.purpleFF00E5Color],
+      ),
+    },
+    {
+      'name': kFavorite,
+      'color': LinearGradient(
+        end: Alignment.bottomCenter,
+        begin: Alignment.topCenter,
+        colors: [AppColors.lightYellowColor, AppColors.yellowFFFB00Color],
+      ),
+    },
+    {
+      'name': kCart,
+      'color': LinearGradient(
+        end: Alignment.bottomCenter,
+        begin: Alignment.topCenter,
+        colors: [AppColors.blue92FFFBColor, AppColors.blue00FFF7Color],
+      ),
+    },
+  ];
   static List<String> titledashboard = [
     kWelcometoShivamStores,
     HiveService().getValue(HiveService.isStaff) == true
@@ -102,7 +138,7 @@ class Strings {
       'set': 6,
       'selectedDesign': 4,
       'totalPiece': 24,
-      'image': 'assets/image/earrings.png',
+      'image': 'assets/image/image_cart.png',
     },
     {
       'title': 'Lipstick - 1006',

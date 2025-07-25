@@ -1,41 +1,58 @@
 class ProductsDetailModel {
   String? message;
-  Data? data;
+  List<CartData>? data;
 
   ProductsDetailModel({this.message, this.data});
 
-  factory ProductsDetailModel.fromJson(Map<String, dynamic> json) =>
-      ProductsDetailModel(
-        message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
-      );
+  factory ProductsDetailModel.fromJson(Map<String, dynamic> json) {
+    return ProductsDetailModel(
+      message: json["message"],
+      data:
+          json["data"] == null
+              ? []
+              : json["data"] is Map
+              ? [CartData.fromJson(json["data"])]
+              : List<CartData>.from(
+                json["data"].map((x) => CartData.fromJson(x)),
+              ),
+    );
+  }
 
-  Map<String, dynamic> toJson() => {"message": message, "data": data?.toJson()};
+  Map<String, dynamic> toJson() => {
+    "message": message,
+    "data": List<dynamic>.from((data ?? []).map((x) => x.toJson())),
+  };
 }
 
-class Data {
+class CartData {
   String? id;
+  bool? isFavorite;
   String? code;
   String? subCategoryId;
   String? image;
   int? setSize;
+  int? type;
   List<Variant>? variants;
 
-  Data({
+  CartData({
     this.id,
     this.code,
     this.subCategoryId,
     this.image,
     this.setSize,
     this.variants,
+    this.isFavorite,
+    this.type,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory CartData.fromJson(Map<String, dynamic> json) => CartData(
     id: json["_id"],
     code: json["code"],
     subCategoryId: json["subCategoryId"],
     image: json["image"],
     setSize: json["setSize"],
+    isFavorite: json["isFavorite"],
+    type: json["type"],
     variants:
         json["variants"] == null
             ? []
@@ -50,6 +67,8 @@ class Data {
     "subCategoryId": subCategoryId,
     "image": image,
     "setSize": setSize,
+    "isFavorite": isFavorite,
+    "type": type,
     "variants": List<dynamic>.from(variants!.map((x) => x.toJson())),
   };
 }
@@ -66,13 +85,13 @@ class Variant {
     name: json["name"],
     available: json["available"],
     id: json["_id"],
-    qty: json["qty"],
+    qty: json["quantity"],
   );
 
   Map<String, dynamic> toJson() => {
     "name": name,
     "available": available,
     "_id": id,
-    "qty": qty,
+    "quantity": qty,
   };
 }

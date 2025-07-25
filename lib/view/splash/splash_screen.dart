@@ -16,34 +16,72 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    // Future.delayed(Duration(seconds: 3), () {
-    //   if (HiveService().getValue(HiveService.userId) == null) {
-    //     Get.offAllNamed(AppRoutes.kRegisterScreen);
-    //   } else {
-    //     Get.offAllNamed(AppRoutes.kDashboardScreen);
-    //   }
-    // });
+    Future.delayed(Duration(seconds: 3), () {
+      if (HiveService().getValue(HiveService.userId) == null) {
+        Get.offAllNamed(AppRoutes.kLoginScreen);
+      } else {
+        Get.offAllNamed(AppRoutes.kHomeScreen);
+      }
+    });
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Conta(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [AppColors.navyBlueColor, AppColors.darkBlueColor],
+
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset("assets/image/logo.svg"),
-              AppSpacing.h50,
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.3,
-                child: LinearProgressIndicator(color: AppColors.blackColor),
-              ),
-            ],
+          padding: const EdgeInsets.all(50),
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: SvgPicture.asset(
+                    "assets/image/splash_image.svg",
+                    height: height * 0.5,
+                  ),
+                ),
+
+                AppSpacing.h32,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CircleAvatar(
+                      radius: 5,
+                      backgroundColor: AppColors.softOrangeColor,
+                    ),
+
+                    AppSpacing.w24,
+                    CircleAvatar(
+                      radius: 5,
+                      backgroundColor: AppColors.softYellowColor,
+                    ),
+                    AppSpacing.w24,
+                    CircleAvatar(
+                      radius: 5,
+                      backgroundColor: AppColors.softPinkColor,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

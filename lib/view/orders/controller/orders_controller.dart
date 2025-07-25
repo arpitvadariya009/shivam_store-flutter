@@ -59,3 +59,10 @@ class OrdersController extends GetxController {
     Get.back();
   }
 }
+
+class OrderBindings extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut(() => OrdersController());
+  }
+}

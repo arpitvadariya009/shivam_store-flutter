@@ -18,34 +18,44 @@ class ShopScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        surfaceTintColor: AppColors.whiteColor,
-        leadingWidth: 140,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 100),
-          child: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: AppColors.blackColor,
-            ),
+        surfaceTintColor: Colors.transparent,
+
+        leading: Container(),
+        leadingWidth: 0,
+        toolbarHeight: 40,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: cText(
+                  value: Get.find<ShopController>().title.toUpperCase(),
+                  fontSize: 20,
+                  color: AppColors.whiteColor,
+                  fontWeight: FontWeight.w500,
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+              Flexible(
+                child: cText(
+                  value: 'S H I V A M',
+                  fontSize: 20,
+                  color: AppColors.whiteColor,
+
+                  overflow: TextOverflow.clip,
+                ),
+              ),
+            ],
           ),
         ),
-
-        backgroundColor: AppColors.whiteColor,
-        elevation: 0,
-        title: cText(
-          value: Get.find<ShopController>().title,
-          fontSize: 20,
-          color: AppColors.blackColor,
-          fontWeight: FontWeight.w600,
-          overflow: TextOverflow.clip,
-        ),
-        centerTitle: true,
       ),
       body: GetBuilder<ShopController>(
         builder: (c) {
@@ -60,7 +70,7 @@ class ShopScreen extends StatelessWidget {
                     mainAxisSpacing: 16,
                     crossAxisSpacing: 16,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 100,
+                      horizontal: 60,
                       vertical: 16,
                     ),
                     itemCount: data?.subCategories?.length,
@@ -74,44 +84,38 @@ class ShopScreen extends StatelessWidget {
                             arguments: {
                               'id': subCatData?.id ?? "",
                               'title': subCatData?.name ?? "",
+                              'bgColor': AppColors.transparentColor,
                             },
                           );
                         },
                         child: Container(
-                          padding: EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: AppColors.unselectedIconColor,
-                            ),
-                          ),
+                          width: double.infinity,
+                          padding: EdgeInsets.all(5),
+
+                          color: AppColors.whiteColor.withOpacity(0.2),
+
                           child: Column(
                             children: [
-                              Container(
-                                width: 150,
-
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: AppColors.blackColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: netWorkImage(
-                                    imageUrl: subCatData?.image ?? "",
-                                  ),
+                              SizedBox(
+                                width: double.infinity,
+                                height: height * 0.25,
+                                child: netWorkImage(
+                                  imageUrl: subCatData?.image ?? "",
                                 ),
                               ),
-                              AppSpacing.h5,
-                              cText(
-                                value: subCatData?.name ?? "",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
+
+                              Container(
+                                width: double.infinity,
                                 color: AppColors.blackColor,
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
+                                padding: EdgeInsets.symmetric(vertical: 5),
+                                child: cText(
+                                  value: (subCatData?.name ?? "").toUpperCase(),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.whiteColor,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),

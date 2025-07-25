@@ -15,6 +15,7 @@ import 'package:shivam_stores/view/auth/model/user_model.dart';
 
 class AuthController extends GetxController {
   TextEditingController firmNameTXTController = TextEditingController();
+  TextEditingController usetNameTXTController = TextEditingController();
   TextEditingController cityTXTController = TextEditingController();
   TextEditingController mobileTXTController = TextEditingController();
   final GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
@@ -28,36 +29,37 @@ class AuthController extends GetxController {
 
   Future<void> register({required BuildContext context}) async {
     if (registerFormKey.currentState!.validate()) {
-      if (isPivacyValid) {
-        LoaderService.instance.show(context);
+      // if (isPivacyValid) {
+      LoaderService.instance.show(context);
 
-        final response = await _apiService.post<UserModel>(
-          ApiEndpoints.register,
-          data: jsonEncode({
-            "firmName": firmNameTXTController.text,
-            "city": cityTXTController.text,
-            "mobile": mobileTXTController.text,
-            "pin": pinTXTController.text,
-          }),
-          parser: (data) => UserModel.fromJson(data),
-        );
-        userModel = response;
-        LoaderService.instance.hide();
-        update();
-        if (userModel.error != null) {
-          await showToast(message: userModel.error ?? "");
-        } else if (userModel.data != null) {
-          await showToast(message: userModel.data?.message ?? "");
-          if (userModel.data?.success == true) {
-            clean();
-            Get.toNamed(AppRoutes.kLoginScreen);
-          }
+      final response = await _apiService.post<UserModel>(
+        ApiEndpoints.register,
+        data: jsonEncode({
+          "userName": usetNameTXTController.text,
+          "firmName": firmNameTXTController.text,
+          "city": cityTXTController.text,
+          "mobile": mobileTXTController.text,
+          "pin": pinTXTController.text,
+        }),
+        parser: (data) => UserModel.fromJson(data),
+      );
+      userModel = response;
+      LoaderService.instance.hide();
+      update();
+      if (userModel.error != null) {
+        await showToast(message: userModel.error ?? "");
+      } else if (userModel.data != null) {
+        await showToast(message: userModel.data?.message ?? "");
+        if (userModel.data?.success == true) {
+          clean();
+          Get.toNamed(AppRoutes.kLoginScreen);
         }
-      } else {
-        await showToast(
-          message: Strings.kPleaseacceptthePrivacyPolicytocontinue,
-        );
       }
+      // } else {
+      //   await showToast(
+      //     message: Strings.kPleaseacceptthePrivacyPolicytocontinue,
+      //   );
+      // }
     }
   }
 
@@ -85,7 +87,10 @@ class AuthController extends GetxController {
             HiveService.userId,
             userModel.data?.data?.id,
           );
-          await HiveService().setValue(HiveService.isStaff, isStaff);
+          await HiveService().setValue(
+            HiveService.isStaff,
+            userModel.data?.data?.userType ?? 0,
+          );
 
           await HiveService().setValue(
             HiveService.userData,
@@ -94,7 +99,7 @@ class AuthController extends GetxController {
 
           clean();
           if (userModel.data?.data?.isverified == true) {
-            Get.offNamed(AppRoutes.kDashboardScreen);
+            Get.offNamed(AppRoutes.kHomeScreen);
           } else {
             Get.toNamed(AppRoutes.kVerificationScreen);
           }

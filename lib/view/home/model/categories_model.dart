@@ -26,6 +26,7 @@ class CategoriesModel {
 
 class CategoriesData {
   String? id;
+  int? type;
   String? name;
   String? code;
   String? image;
@@ -39,6 +40,7 @@ class CategoriesData {
   CategoriesData({
     this.id,
     this.name,
+    this.type,
     this.image,
     this.code,
     this.status,
@@ -52,6 +54,7 @@ class CategoriesData {
   factory CategoriesData.fromJson(Map<String, dynamic> json) => CategoriesData(
     id: json["_id"],
     name: json["name"],
+    type: json["type"],
     code: json["code"],
     image: json["image"],
     categoryId:
@@ -65,10 +68,10 @@ class CategoriesData {
   Map<String, dynamic> toJson() => {
     "_id": id,
     "name": name,
+    "type": type,
     "image": image,
     "code": code,
     "categoryId": categoryId?.toJson(),
-
     "status": status,
   };
 }

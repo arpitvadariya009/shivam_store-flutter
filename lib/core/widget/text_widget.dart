@@ -36,7 +36,7 @@ Widget titleText({required String value}) {
     child: cText(
       value: value,
       fontSize: 14,
-      color: AppColors.blackColor,
+      color: AppColors.whiteColor,
       fontWeight: FontWeight.w500,
     ),
   );
