@@ -25,7 +25,7 @@ class ApiStateWidget<T> extends StatelessWidget {
     if (response.isLoading) {
       return loadingWidget ??
           const Center(
-            child: CircularProgressIndicator(color: AppColors.blackColor),
+            child: CircularProgressIndicator(color: AppColors.whiteColor),
           );
     }
 
@@ -63,6 +63,8 @@ class ApiStateWidget<T> extends StatelessWidget {
       return dataBuilder(response.data as T);
     }
 
-    return Center(child: cText(value: 'No data available'));
+    return Center(
+      child: cText(value: 'No data available', color: AppColors.whiteColor),
+    );
   }
 }

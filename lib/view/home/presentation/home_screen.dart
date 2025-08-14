@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:shivam_stores/core/routes/app_routes.dart';
@@ -65,12 +66,15 @@ class HomeScreen extends StatelessWidget {
                   gradient: Strings.labels[index]['color'],
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: cText(
-                  value: Strings.labels[index]['name'],
-                  color: AppColors.textPrimaryColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
+                child:
+                    index == 0
+                        ? SvgPicture.asset('assets/image/profile.svg')
+                        : cText(
+                          value: Strings.labels[index]['name'],
+                          color: Strings.labels[index]['text_color'],
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
               ),
             );
           }),
@@ -101,7 +105,6 @@ class HomeScreen extends StatelessWidget {
                         return GestureDetector(
                           onTap: () {
                             c.pause();
-
                             Get.toNamed(
                               AppRoutes.kShopScreen,
                               arguments: {
@@ -167,27 +170,31 @@ class HomeScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 AppSpacing.h16,
-                                RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: 'WEL-COME TO DIGITAL WORLD OF',
-                                        style: TextStyle(
-                                          color: AppColors.whiteColor,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
-                                        ),
-                                      ),
+                                Align(
+                                  alignment: Alignment.centerRight,
 
-                                      WidgetSpan(child: AppSpacing.w10),
-                                      TextSpan(
-                                        text: 'S H I V A M',
-                                        style: TextStyle(
-                                          color: AppColors.whiteColor,
-                                          fontSize: 22,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'WEL-COME TO DIGITAL WORLD OF',
+                                          style: TextStyle(
+                                            color: AppColors.whiteColor,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+
+                                        WidgetSpan(child: AppSpacing.w10),
+                                        TextSpan(
+                                          text: 'S H I V A M',
+                                          style: TextStyle(
+                                            color: AppColors.whiteColor,
+                                            fontSize: 22,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 Expanded(

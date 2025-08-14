@@ -67,4 +67,10 @@ class AppColors {
   static const Color buttonFFAE00Color = Color(0xffFFAE00);
   static const Color button17AC9DColor = Color(0xff17AC9D);
   static const Color button24AC17Color = Color(0xff24AC17);
+  static const Color buttonFF65F0Color = Color(0xffFF65F0);
+  static const Color buttonFFFC4EColor = Color(0xffFFFC4E);
+  static const Color button5EFAF5Color = Color(0xff5EFAF5);
+  static const Color textA0DAFEColor = Color(0xffA0DAFE);
+  static const Color textFAFFBFColor = Color(0xffFAFFBF);
+  static const Color textFFB7F9Color = Color(0xffFFB7F9);
 }

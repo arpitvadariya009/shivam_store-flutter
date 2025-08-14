@@ -2,12 +2,14 @@ import 'package:shivam_stores/view/shop/model/product_detail_model.dart';
 
 class CartModel {
   bool? success;
+  String? message;
   List<Cart>? cart;
 
-  CartModel({this.success, this.cart});
+  CartModel({this.success, this.cart, this.message});
 
   factory CartModel.fromJson(Map<String, dynamic> json) => CartModel(
     success: json["success"],
+    message: json["message"],
     cart:
         json["cart"] == null
             ? []
@@ -16,6 +18,7 @@ class CartModel {
 
   Map<String, dynamic> toJson() => {
     "success": success,
+    "message": message,
     "cart": List<dynamic>.from(cart!.map((x) => x.toJson())),
   };
 }

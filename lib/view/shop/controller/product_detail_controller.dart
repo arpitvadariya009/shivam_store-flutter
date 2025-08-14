@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shivam_stores/core/utils/app_colors.dart';
@@ -65,6 +67,8 @@ class ProductDetailController extends GetxController {
       await _apiService.put(
         ApiEndpoints.updateToCart,
         data: {
+          "categoryId ": Get.find<ShopController>().id,
+
           "userId": HiveService().getValue(HiveService.userId),
           "productCode": productCode,
           "productId": productId,
@@ -93,6 +97,7 @@ class ProductDetailController extends GetxController {
     required String productId,
     required bool isFavorite,
   }) async {
+    log("--------------->isFavorite--->${isFavorite}");
     await _apiService.post(
       isFavorite == true
           ? ApiEndpoints.createFavorite
@@ -102,6 +107,11 @@ class ProductDetailController extends GetxController {
         "productId": productId,
       },
     );
+
+    if (title.contains('FAVORITE')) {
+      Get.find<ShopDetailController>().fetchFavProduct();
+      Get.find<ShopDetailController>().update();
+    }
     update();
   }
 }

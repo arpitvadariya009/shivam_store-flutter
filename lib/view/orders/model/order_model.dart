@@ -1,47 +1,33 @@
-class OrderModel {
-  String? message;
-  List<OrderData>? data;
+// To parse this JSON data, do
+//
+//     final orderModel = orderModelFromJson(jsonString);
 
-  OrderModel({this.message, this.data});
+import 'dart:convert';
+
+OrderModel orderModelFromJson(String str) =>
+    OrderModel.fromJson(json.decode(str));
+
+String orderModelToJson(OrderModel data) => json.encode(data.toJson());
+
+class OrderModel {
+  bool? success;
+  Map<String, List<String>>? groupedOrders;
+
+  OrderModel({this.success, this.groupedOrders});
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
-    message: json["message"],
-    data:
-        json["data"] == null
-            ? []
-            : List<OrderData>.from(
-              json["data"].map((x) => OrderData.fromJson(x)),
-            ),
+    success: json["success"],
+    groupedOrders: Map.from(json["groupedOrders"]).map(
+      (k, v) =>
+          MapEntry<String, List<String>>(k, List<String>.from(v.map((x) => x))),
+    ),
   );
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-  };
-}
-
-class OrderData {
-  String? id;
-  var status;
-  DateTime? date;
-  List<String>? products;
-
-  OrderData({this.date, this.products, this.id, this.status});
-
-  factory OrderData.fromJson(Map<String, dynamic> json) => OrderData(
-    id: json["id"],
-    status: json["status"],
-    date: DateTime.parse(json["date"]),
-    products:
-        json["products"] == null
-            ? []
-            : List<String>.from(json["products"].map((x) => x)),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "status": status,
-    "date": date?.toIso8601String(),
-    "products": List<dynamic>.from(products!.map((x) => x)),
+    "success": success,
+    "groupedOrders": Map.from(groupedOrders ?? {}).map(
+      (k, v) =>
+          MapEntry<String, dynamic>(k, List<dynamic>.from(v.map((x) => x))),
+    ),
   };
 }

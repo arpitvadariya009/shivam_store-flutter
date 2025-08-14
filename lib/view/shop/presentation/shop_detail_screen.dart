@@ -23,19 +23,19 @@ class ShopDetailScreen extends StatelessWidget {
       appBar: AppBar(
         leading: Container(),
         leadingWidth: 0,
-        toolbarHeight: 40,
+        toolbarHeight: 20,
         backgroundColor: Get.find<ShopDetailController>().bgColor,
         surfaceTintColor: Get.find<ShopDetailController>().bgColor,
         elevation: 0,
         title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: cText(
                   value: Get.find<ShopDetailController>().title ?? "",
-                  fontSize: 20,
+                  fontSize: 14,
                   color:
                       Get.find<ShopDetailController>().textColor ??
                       AppColors.whiteColor,
@@ -46,7 +46,7 @@ class ShopDetailScreen extends StatelessWidget {
               Flexible(
                 child: cText(
                   value: 'S H I V A M',
-                  fontSize: 20,
+                  fontSize: 16,
                   color:
                       Get.find<ShopDetailController>().textColor ??
                       AppColors.whiteColor,

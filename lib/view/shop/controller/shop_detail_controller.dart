@@ -16,7 +16,7 @@ class ShopDetailController extends GetxController {
   final ApiService _apiService = ApiService.instance;
   ApiResponse<ProductsDetailModel?> productsModel =
       ApiResponse<ProductsDetailModel?>();
-  Color? bgColor = Colors.transparent;
+  Color? bgColor = Colors.black;
   Color? textColor = AppColors.whiteColor;
   String? id = "";
   String? title = "";
@@ -47,6 +47,11 @@ class ShopDetailController extends GetxController {
       '${ApiEndpoints.getFavorite}${HiveService().getValue(HiveService.userId)}',
       parser: (data) => ProductsDetailModel.fromJson(data),
     );
+
+    for (int i = 0; i < response.data!.data!.length; i++) {
+      response.data!.data![i].isFavorite = true;
+    }
+    update(); // Update UI with data or error
 
     productsModel = response;
     update(); // Update UI with data or error

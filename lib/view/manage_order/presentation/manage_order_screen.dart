@@ -17,22 +17,22 @@ class ManageOrderScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.button2C0203Color,
       appBar: AppBar(
-        surfaceTintColor: AppColors.button2C0203Color,
+        surfaceTintColor: AppColors.blackColor,
 
         leading: Container(),
         leadingWidth: 0,
-        toolbarHeight: 40,
-        backgroundColor: AppColors.button2C0203Color,
+        toolbarHeight: 20,
+        backgroundColor: AppColors.blackColor,
         elevation: 0,
         title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: cText(
                   value: 'MANAGE ORDERS',
-                  fontSize: 20,
+                  fontSize: 14,
                   color: AppColors.whiteColor,
                   fontWeight: FontWeight.w500,
                   overflow: TextOverflow.clip,
@@ -41,7 +41,7 @@ class ManageOrderScreen extends StatelessWidget {
               Flexible(
                 child: cText(
                   value: 'S H I V A M',
-                  fontSize: 20,
+                  fontSize: 16,
                   color: AppColors.whiteColor,
 
                   overflow: TextOverflow.clip,

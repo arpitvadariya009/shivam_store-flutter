@@ -59,15 +59,24 @@ class ApiService extends GetxService {
     Map<String, dynamic>? queryParameters,
     T Function(dynamic)? parser,
   }) async {
+    log("----------get api--->");
+
     try {
       final response = await _dio.get(
         endpoint,
         queryParameters: queryParameters,
       );
+      log("----------response.data--->${response.data}");
 
       if (response.statusCode == 200) {
         final data =
             parser != null ? parser(response.data) : response.data as T;
+
+        return ApiResponse<T>().success(data);
+      } else if (response.data['message'].toString().contains('empty')) {
+        final data =
+            parser != null ? parser(response.data) : response.data as T;
+
         return ApiResponse<T>().success(data);
       } else {
         return ApiResponse<T>().failure(
@@ -75,7 +84,14 @@ class ApiService extends GetxService {
         );
       }
     } on DioException catch (e) {
-      return ApiResponse<T>().failure(_handleDioError(e));
+      if (e.response!.data['message'].toString().contains('empty')) {
+        final data =
+            parser != null ? parser(e.response!.data) : e.response!.data as T;
+
+        return ApiResponse<T>().success(data);
+      } else {
+        return ApiResponse<T>().failure(_handleDioError(e));
+      }
     } catch (e) {
       return ApiResponse<T>().failure('Unexpected error: $e');
     }
@@ -94,7 +110,7 @@ class ApiService extends GetxService {
         data: data,
         queryParameters: queryParameters,
       );
-
+      print("----------------->${response.data}");
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData =
             parser != null ? parser(response.data) : response.data as T;
@@ -105,8 +121,12 @@ class ApiService extends GetxService {
         );
       }
     } on DioException catch (e) {
+      print("-----------------DioException>${e}");
+
       return ApiResponse<T>().failure(_handleDioError(e));
     } catch (e) {
+      print("----------------->${e}");
+
       return ApiResponse<T>().failure('Unexpected error: $e');
     }
   }

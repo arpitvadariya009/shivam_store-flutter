@@ -27,19 +27,19 @@ class ProductDetailScreen extends StatelessWidget {
       appBar: AppBar(
         leading: Container(),
         leadingWidth: 0,
-        toolbarHeight: 40,
+        toolbarHeight: 20,
         backgroundColor: Get.find<ProductDetailController>().bgColor,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: cText(
                   value: Get.find<ProductDetailController>().title,
-                  fontSize: 20,
+                  fontSize: 14,
                   color:
                       Get.find<ProductDetailController>().textColor ??
                       AppColors.whiteColor,
@@ -50,7 +50,7 @@ class ProductDetailScreen extends StatelessWidget {
               Flexible(
                 child: cText(
                   value: 'S H I V A M',
-                  fontSize: 20,
+                  fontSize: 16,
                   color:
                       Get.find<ProductDetailController>().textColor ??
                       AppColors.whiteColor,
@@ -273,13 +273,18 @@ class ProductDetailScreen extends StatelessWidget {
 
                               ButtonWidget(
                                 onTap: () {
-                                  product?.isFavorite =
-                                      !(product.isFavorite ?? false);
+                                  if (product?.isFavorite == null ||
+                                      product?.isFavorite == false) {
+                                    product?.isFavorite = true;
+                                  } else {
+                                    product?.isFavorite = false;
+                                  }
+                                  c.update();
+
                                   c.addToFavorite(
                                     productId: product?.id ?? "",
                                     isFavorite: product?.isFavorite ?? false,
                                   );
-                                  c.update();
                                 },
                                 title:
                                     product?.type == 0
@@ -294,9 +299,7 @@ class ProductDetailScreen extends StatelessWidget {
                                         ? "PREMIUM"
                                         : "",
                                 leadingWidget: SvgPicture.asset(
-                                  Get.find<ProductDetailController>().title
-                                              .contains("FAVORITE") ||
-                                          product?.isFavorite == true
+                                  product?.isFavorite == true
                                       ? "assets/image/star_fill.svg"
                                       : "assets/image/star.svg",
                                 ),

@@ -70,7 +70,7 @@ class OrdersScreen extends StatelessWidget {
             return ApiStateWidget<OrderModel?>(
               response: c.orderModel,
               dataBuilder: (data) {
-                return (data?.data ?? []).isEmpty
+                return (data?.groupedOrders ?? {}).isEmpty
                     ? Center(child: cText(value: 'No data available'))
                     : MasonryGridView.count(
                       crossAxisCount: 2,
@@ -80,9 +80,10 @@ class OrdersScreen extends StatelessWidget {
                         horizontal: 60,
                         vertical: 16,
                       ),
-                      itemCount: data?.data?.length,
+                      itemCount: data?.groupedOrders?.length ?? 0,
                       itemBuilder: (context, index) {
-                        final order = data?.data?[index];
+                        final date = data!.groupedOrders?.keys.elementAt(index);
+                        final order = data.groupedOrders?[date] ?? [];
                         return Container(
                           margin: EdgeInsets.only(bottom: 10),
                           decoration: BoxDecoration(
@@ -103,7 +104,7 @@ class OrdersScreen extends StatelessWidget {
                                 child: cText(
                                   value: DateFormat(
                                     'dd-MM-yyyy',
-                                  ).format(order?.date ?? DateTime.now()),
+                                  ).format(DateTime.parse(date ?? "")),
                                   color: AppColors.whiteColor.withOpacity(0.75),
                                   fontWeight: FontWeight.w600,
 
@@ -111,17 +112,13 @@ class OrdersScreen extends StatelessWidget {
                                 ),
                               ),
                               AppSpacing.h5,
-                              for (
-                                int i = 0;
-                                i < (order?.products ?? []).length;
-                                i++
-                              )
+                              for (var order in order)
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 10,
                                   ),
                                   child: cText(
-                                    value: '(${order?.products?[i]})',
+                                    value: "(${order})",
 
                                     color: AppColors.whiteColor,
                                     fontSize: 12,

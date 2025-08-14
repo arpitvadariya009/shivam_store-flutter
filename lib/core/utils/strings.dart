@@ -76,34 +76,46 @@ class Strings {
     {
       'name': kProfile,
       'color': LinearGradient(
-        end: Alignment.bottomCenter,
-        begin: Alignment.topCenter,
-        colors: [AppColors.powderGreenColor, AppColors.green00FF2BColor],
-      ),
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: [AppColors.navyBlueColor, AppColors.darkBlueColor],
+      ).withOpacity(0.9),
     },
     {
       'name': kOrders,
+      'text_color': AppColors.textFFB7F9Color,
       'color': LinearGradient(
-        end: Alignment.bottomCenter,
-        begin: Alignment.topCenter,
-        colors: [AppColors.powderPurpleColor, AppColors.purpleFF00E5Color],
-      ),
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: [
+          AppColors.buttonFF65F0Color.withOpacity(0.7),
+          AppColors.darkBlueColor,
+        ],
+      ).withOpacity(0.9),
     },
     {
       'name': kFavorite,
+      'text_color': AppColors.textFAFFBFColor,
       'color': LinearGradient(
-        end: Alignment.bottomCenter,
-        begin: Alignment.topCenter,
-        colors: [AppColors.lightYellowColor, AppColors.yellowFFFB00Color],
-      ),
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: [
+          AppColors.buttonFFFC4EColor.withOpacity(0.7),
+          AppColors.darkBlueColor,
+        ],
+      ).withOpacity(0.9),
     },
     {
       'name': kCart,
+      'text_color': AppColors.textA0DAFEColor,
       'color': LinearGradient(
-        end: Alignment.bottomCenter,
-        begin: Alignment.topCenter,
-        colors: [AppColors.blue92FFFBColor, AppColors.blue00FFF7Color],
-      ),
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: [
+          AppColors.button5EFAF5Color.withOpacity(0.7),
+          AppColors.darkBlueColor,
+        ],
+      ).withOpacity(0.9),
     },
   ];
   static List<String> titledashboard = [

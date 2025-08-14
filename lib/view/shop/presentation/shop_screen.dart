@@ -23,22 +23,22 @@ class ShopScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: Colors.black,
 
         leading: Container(),
         leadingWidth: 0,
-        toolbarHeight: 40,
-        backgroundColor: Colors.transparent,
+        toolbarHeight: 20,
+        backgroundColor: Colors.black,
         elevation: 0,
         title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: cText(
                   value: Get.find<ShopController>().title.toUpperCase(),
-                  fontSize: 20,
+                  fontSize: 14,
                   color: AppColors.whiteColor,
                   fontWeight: FontWeight.w500,
                   overflow: TextOverflow.clip,
@@ -47,7 +47,7 @@ class ShopScreen extends StatelessWidget {
               Flexible(
                 child: cText(
                   value: 'S H I V A M',
-                  fontSize: 20,
+                  fontSize: 16,
                   color: AppColors.whiteColor,
 
                   overflow: TextOverflow.clip,
@@ -84,7 +84,7 @@ class ShopScreen extends StatelessWidget {
                             arguments: {
                               'id': subCatData?.id ?? "",
                               'title': subCatData?.name ?? "",
-                              'bgColor': AppColors.transparentColor,
+                              'bgColor': AppColors.blackColor,
                             },
                           );
                         },
