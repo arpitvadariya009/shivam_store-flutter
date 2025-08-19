@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                 } else if (index == 3) {
                   Get.toNamed(AppRoutes.kCartScreen);
                 } else if (index == 1) {
-                  Get.toNamed(AppRoutes.kOrdersScreen);
+                  Get.toNamed(AppRoutes.kManageOrderScreen);
                 } else if (index == 0) {
                   Get.toNamed(AppRoutes.kProfileScreen);
                 }

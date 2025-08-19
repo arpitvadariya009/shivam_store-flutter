@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shivam_stores/core/utils/app_colors.dart';
 import 'package:shivam_stores/core/utils/strings.dart';
+import 'package:shivam_stores/core/widget/api_state_manage.dart';
 import 'package:shivam_stores/core/widget/button_widget.dart';
 import 'package:shivam_stores/core/widget/spacing.dart';
 import 'package:shivam_stores/core/widget/text_widget.dart';
 import 'package:shivam_stores/view/manage_order/controller/manage_order_controller.dart';
+import 'package:shivam_stores/view/manage_order/model/manage_order_model.dart';
 
 class ManageOrderScreen extends StatelessWidget {
   const ManageOrderScreen({super.key});
@@ -76,6 +79,7 @@ class ManageOrderScreen extends StatelessWidget {
                         ButtonWidget(
                           onTap: () {
                             c.buttonIndex = 0;
+                            c.fetchOrder(date: DateTime.now());
                             c.update();
                           },
                           title: 'TODAY',
@@ -96,6 +100,12 @@ class ManageOrderScreen extends StatelessWidget {
                         ButtonWidget(
                           onTap: () {
                             c.buttonIndex = 1;
+                            c.fetchOrder(
+                              date: DateTime.now().subtract(
+                                const Duration(days: 1),
+                              ),
+                            );
+
                             c.update();
                           },
                           title: 'YESTERDAY',
@@ -117,6 +127,7 @@ class ManageOrderScreen extends StatelessWidget {
                         ButtonWidget(
                           onTap: () {
                             c.buttonIndex = 2;
+                            c.fetchOrder(status: 'PENDING');
                             c.update();
                           },
                           title: 'PENDING',
@@ -199,99 +210,115 @@ class ManageOrderScreen extends StatelessWidget {
                 ),
 
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: 3,
+                  child: ApiStateWidget<ManageOrderModel?>(
+                    response: c.orderModel,
+                    dataBuilder: (data) {
+                      return ListView.builder(
+                        itemCount: (data?.orders ?? []).length,
 
-                    padding: EdgeInsets.all(15),
-                    itemBuilder: (context, index) {
-                      return Container(
-                        width: double.infinity,
-                        height: 42,
-                        margin: EdgeInsets.only(bottom: 10),
-                        decoration: BoxDecoration(
-                          color:
-                              index % 2 != 0
-                                  ? AppColors.buttonFFADCBColor.withOpacity(0.7)
-                                  : AppColors.buttonFFDEDFColor.withOpacity(
-                                    0.7,
+                        padding: EdgeInsets.all(15),
+                        itemBuilder: (context, index) {
+                          final orders = data?.orders?[index];
+                          return Container(
+                            width: double.infinity,
+                            height: 42,
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              color:
+                                  index % 2 != 0
+                                      ? AppColors.buttonFFADCBColor.withOpacity(
+                                        0.7,
+                                      )
+                                      : AppColors.buttonFFDEDFColor.withOpacity(
+                                        0.7,
+                                      ),
+                            ),
+
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  cText(
+                                    value:
+                                        orders?.date == null
+                                            ? ""
+                                            : DateFormat(
+                                              'dd-MM-yyyy',
+                                            ).format(orders!.date!),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                        ),
-
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              cText(
-                                value: "05-06-2025",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              AppSpacing.w50,
-                              cText(
-                                value: "AHMEDABAD",
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
-
-                              AppSpacing.w10,
-                              Container(
-                                width: width * 0.5,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  gradient: LinearGradient(
-                                    colors:
-                                        index == 0
-                                            ? [
-                                              AppColors.buttonAC9017Color,
-                                              AppColors.button4D410AColor
-                                                  .withOpacity(0.1),
-                                            ]
-                                            : index == 1
-                                            ? [
-                                              AppColors.button17AC9DColor,
-                                              AppColors.button4D410AColor
-                                                  .withOpacity(0.1),
-                                            ]
-                                            : [
-                                              AppColors.button24AC17Color,
-                                              AppColors.button4D410AColor
-                                                  .withOpacity(0.1),
-                                            ],
+                                  AppSpacing.w50,
+                                  cText(
+                                    value: orders?.city ?? "",
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    AppSpacing.w16,
-                                    cText(
-                                      value: 'Imitation ',
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w600,
+
+                                  AppSpacing.w10,
+                                  Container(
+                                    width: width * 0.5,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      gradient: LinearGradient(
+                                        colors:
+                                            index == 0
+                                                ? [
+                                                  AppColors.buttonAC9017Color,
+                                                  AppColors.button4D410AColor
+                                                      .withOpacity(0.1),
+                                                ]
+                                                : index == 1
+                                                ? [
+                                                  AppColors.button17AC9DColor,
+                                                  AppColors.button4D410AColor
+                                                      .withOpacity(0.1),
+                                                ]
+                                                : [
+                                                  AppColors.button24AC17Color,
+                                                  AppColors.button4D410AColor
+                                                      .withOpacity(0.1),
+                                                ],
+                                      ),
                                     ),
-                                    cText(
-                                      value: 'KAHAI JEWELS',
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        AppSpacing.w16,
+                                        cText(
+                                          value: '${orders?.category ?? ""} ',
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        cText(
+                                          value: 'KAHAI JEWELS',
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  AppSpacing.w10,
+                                  ButtonWidget(
+                                    height: 36,
+                                    onTap: () {},
+                                    title: orders?.status ?? "",
+                                    bgColor: AppColors.buttonFFAE00Color,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    textcolor: AppColors.blackColor,
+                                    border: Border.all(
+                                      color: AppColors.blackColor,
+                                    ),
+                                  ),
+                                  AppSpacing.w10,
+                                ],
                               ),
-                              AppSpacing.w10,
-                              ButtonWidget(
-                                height: 36,
-                                onTap: () {},
-                                title: Strings.kPending,
-                                bgColor: AppColors.buttonFFAE00Color,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                textcolor: AppColors.blackColor,
-                                border: Border.all(color: AppColors.blackColor),
-                              ),
-                              AppSpacing.w10,
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),

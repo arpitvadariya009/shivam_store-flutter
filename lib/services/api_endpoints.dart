@@ -21,4 +21,5 @@ class ApiEndpoints {
   static const String deleteFavorite = "deleteFavorite";
   static const String getToCart = "get-to-cart?userId=";
   static const String placeOrder = "place-order";
+  static const String allGroupedOrders = "all/grouped-orders";
 }
