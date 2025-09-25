@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:shivam_stores/model/api_response_model.dart';
 import 'package:shivam_stores/services/api_endpoints.dart';
 import 'package:shivam_stores/services/api_services.dart';
+import 'package:shivam_stores/services/hive_service.dart';
 import 'package:shivam_stores/view/home/model/categories_model.dart';
 import 'package:video_player/video_player.dart';
 
@@ -55,6 +58,13 @@ class HomeController extends GetxController {
     );
 
     categoriesModel = response;
+    List categoryName = [];
+
+    for (int i = 0; i < (categoriesModel.data?.data ?? []).length; i++) {
+      categoryName.add(categoriesModel.data?.data?[i].name);
+    }
+    print("-------------------->categoryName------>${categoryName}");
+    HiveService().setValue(HiveService.category, jsonEncode(categoryName));
     update(); // Update UI with data or error
   }
 

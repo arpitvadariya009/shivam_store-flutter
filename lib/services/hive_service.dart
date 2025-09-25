@@ -2,9 +2,11 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveService {
+  static const String category = 'category';
   static const String userId = 'userId';
   static const String isStaff = 'isStaff';
   static const String userData = 'userData';
+  static const String location = 'location';
   static final HiveService _instance = HiveService._internal();
   factory HiveService() => _instance;
   HiveService._internal();

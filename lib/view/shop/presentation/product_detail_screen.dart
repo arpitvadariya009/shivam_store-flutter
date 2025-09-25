@@ -148,9 +148,10 @@ class ProductDetailScreen extends StatelessWidget {
                                                         ?.variants?[i]
                                                         .available ==
                                                     true) {
-                                                  if (product!
-                                                          .variants![i]
-                                                          .qty !=
+                                                  if ((product!
+                                                              .variants![i]
+                                                              .qty ??
+                                                          0) >
                                                       0) {
                                                     product.variants![i].qty =
                                                         (product

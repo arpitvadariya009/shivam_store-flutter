@@ -97,16 +97,30 @@ class ProductDetailController extends GetxController {
     required String productId,
     required bool isFavorite,
   }) async {
-    log("--------------->isFavorite--->${isFavorite}");
-    await _apiService.post(
-      isFavorite == true
-          ? ApiEndpoints.createFavorite
-          : ApiEndpoints.deleteFavorite,
-      data: {
-        "userId": HiveService().getValue(HiveService.userId),
-        "productId": productId,
-      },
+    print(
+      "--------------->isFavorite--->${isFavorite == true ? ApiEndpoints.createFavorite : ApiEndpoints.deleteFavorite}",
     );
+    print(
+      "--------------->data--->${{"userId": HiveService().getValue(HiveService.userId), "productId": productId}}",
+    );
+
+    if (isFavorite == true) {
+      await _apiService.post(
+        ApiEndpoints.createFavorite,
+        data: {
+          "userId": HiveService().getValue(HiveService.userId),
+          "productId": productId,
+        },
+      );
+    } else {
+      await _apiService.delete(
+        ApiEndpoints.deleteFavorite,
+        data: {
+          "userId": HiveService().getValue(HiveService.userId),
+          "productId": productId,
+        },
+      );
+    }
 
     if (title.contains('FAVORITE')) {
       Get.find<ShopDetailController>().fetchFavProduct();

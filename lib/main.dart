@@ -12,9 +12,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await AndroidAlarmManager.initialize();
-  // await BackgroundLocation.openBatterySettings();
-  // await BackgroundLocation.ensurePermissionsReady();
+  // await AndroidAlarmManager.initialize();
+  await BackgroundLocation.ensurePermissionsReady();
+  await BackgroundLocation.getLocationInBackground();
   // await BackgroundLocation.addScheduler();
 
   await SystemChrome.setPreferredOrientations([

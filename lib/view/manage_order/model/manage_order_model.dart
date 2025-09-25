@@ -21,7 +21,12 @@ class ManageOrderModel {
       ManageOrderModel(
         success: json["success"],
         total: json["total"],
-        orders: List<Order>.from(json["orders"].map((x) => Order.fromJson(x))),
+        orders:
+            json["orders"] == null
+                ? []
+                : List<Order>.from(
+                  json["orders"].map((x) => Order.fromJson(x)),
+                ),
       );
 
   Map<String, dynamic> toJson() => {
@@ -32,37 +37,53 @@ class ManageOrderModel {
 }
 
 class Order {
+  String? orderId;
   DateTime? date;
   String? city;
+  String? firmName;
   String? category;
   String? productName;
+  String? productCode;
+  String? variantName;
+  int? quantity;
   String? status;
-  String? orderId;
 
   Order({
+    this.orderId,
     this.date,
     this.city,
+    this.firmName,
     this.category,
     this.productName,
+    this.productCode,
+    this.variantName,
+    this.quantity,
     this.status,
-    this.orderId,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
-    date: DateTime.parse(json["date"]),
+    orderId: json["orderId"],
+    date: DateTime.tryParse(json["date"]),
     city: json["city"],
+    firmName: json["firmName"],
     category: json["category"],
     productName: json["productName"],
+    productCode: json["productCode"],
+    variantName: json["variantName"],
+    quantity: json["quantity"],
     status: json["status"],
-    orderId: json["orderId"],
   );
 
   Map<String, dynamic> toJson() => {
-    "date": date,
+    "orderId": orderId,
+    "date": date?.toIso8601String(),
     "city": city,
+    "firmName": firmName,
     "category": category,
     "productName": productName,
+    "productCode": productCode,
+    "variantName": variantName,
+    "quantity": quantity,
     "status": status,
-    "orderId": orderId,
   };
 }

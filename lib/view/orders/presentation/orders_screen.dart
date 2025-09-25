@@ -71,7 +71,12 @@ class OrdersScreen extends StatelessWidget {
               response: c.orderModel,
               dataBuilder: (data) {
                 return (data?.groupedOrders ?? {}).isEmpty
-                    ? Center(child: cText(value: 'No data available'))
+                    ? Center(
+                      child: cText(
+                        value: 'No data available',
+                        color: AppColors.whiteColor,
+                      ),
+                    )
                     : MasonryGridView.count(
                       crossAxisCount: 2,
                       mainAxisSpacing: 16,

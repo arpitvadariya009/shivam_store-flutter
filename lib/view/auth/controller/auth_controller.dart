@@ -22,11 +22,29 @@ class AuthController extends GetxController {
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   TextEditingController pinTXTController = TextEditingController();
   bool isPasswordValid = false;
-  bool isStaff = true;
   bool isPivacyValid = false;
   final ApiService _apiService = ApiService.instance;
   ApiResponse<UserModel?> userModel = ApiResponse<UserModel?>();
-
+  double latitude =
+      HiveService().getValue(HiveService.location) == null
+          ? 0.0
+          : double.parse(
+            HiveService()
+                .getValue(HiveService.location)
+                .toString()
+                .split(',')
+                .first,
+          );
+  double longitude =
+      HiveService().getValue(HiveService.location) == null
+          ? 0.0
+          : double.parse(
+            HiveService()
+                .getValue(HiveService.location)
+                .toString()
+                .split(',')
+                .last,
+          );
   Future<void> register({required BuildContext context}) async {
     if (registerFormKey.currentState!.validate()) {
       // if (isPivacyValid) {
@@ -40,6 +58,8 @@ class AuthController extends GetxController {
           "city": cityTXTController.text,
           "mobile": mobileTXTController.text,
           "pin": pinTXTController.text,
+          "latitude": latitude,
+          "longitude": longitude,
         }),
         parser: (data) => UserModel.fromJson(data),
       );
@@ -89,7 +109,7 @@ class AuthController extends GetxController {
           );
           await HiveService().setValue(
             HiveService.isStaff,
-            userModel.data?.data?.userType ?? 0,
+            userModel.data?.data?.userType ?? 1,
           );
 
           await HiveService().setValue(

@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                 } else if (index == 3) {
                   Get.toNamed(AppRoutes.kCartScreen);
                 } else if (index == 1) {
-                  Get.toNamed(AppRoutes.kManageOrderScreen);
+                  Get.toNamed(AppRoutes.kOrdersScreen);
                 } else if (index == 0) {
                   Get.toNamed(AppRoutes.kProfileScreen);
                 }
@@ -93,7 +93,7 @@ class HomeScreen extends StatelessWidget {
                     child: ListView.builder(
                       padding: EdgeInsets.only(
                         left: 20,
-                        top: 22,
+                        top: 40,
                         bottom: 16,
                         right: 5,
                       ),
@@ -169,31 +169,35 @@ class HomeScreen extends StatelessWidget {
                             ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                AppSpacing.h16,
+                                AppSpacing.h24,
                                 Align(
                                   alignment: Alignment.centerRight,
 
-                                  child: RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: 'WEL-COME TO DIGITAL WORLD OF',
-                                          style: TextStyle(
-                                            color: AppColors.whiteColor,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 30),
+                                    child: RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text:
+                                                'WEL-COME TO DIGITAL WORLD OF',
+                                            style: TextStyle(
+                                              color: AppColors.whiteColor,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16,
+                                            ),
                                           ),
-                                        ),
 
-                                        WidgetSpan(child: AppSpacing.w10),
-                                        TextSpan(
-                                          text: 'S H I V A M',
-                                          style: TextStyle(
-                                            color: AppColors.whiteColor,
-                                            fontSize: 22,
+                                          WidgetSpan(child: AppSpacing.w10),
+                                          TextSpan(
+                                            text: 'S H I V A M',
+                                            style: TextStyle(
+                                              color: AppColors.whiteColor,
+                                              fontSize: 22,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

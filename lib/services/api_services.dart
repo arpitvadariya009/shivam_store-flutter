@@ -84,7 +84,8 @@ class ApiService extends GetxService {
         );
       }
     } on DioException catch (e) {
-      if (e.response!.data['message'].toString().contains('empty')) {
+      if (e.response!.data['message'].toString().contains('empty') ||
+          e.response!.data['message'].toString().contains('No')) {
         final data =
             parser != null ? parser(e.response!.data) : e.response!.data as T;
 
@@ -164,12 +165,15 @@ class ApiService extends GetxService {
   // Generic DELETE request
   Future<ApiResponse<bool>> delete(
     String endpoint, {
+    dynamic data,
+
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
       final response = await _dio.delete(
         endpoint,
         queryParameters: queryParameters,
+        data: data,
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
