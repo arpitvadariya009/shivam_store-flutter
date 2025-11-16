@@ -1,50 +1,153 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:shivam_stores/back_ground_service.dart';
 import 'package:shivam_stores/model/api_response_model.dart';
 import 'package:shivam_stores/services/api_endpoints.dart';
 import 'package:shivam_stores/services/api_services.dart';
 import 'package:shivam_stores/services/hive_service.dart';
+import 'package:shivam_stores/view/auth/model/user_model.dart';
 import 'package:shivam_stores/view/home/model/categories_model.dart';
 import 'package:video_player/video_player.dart';
 
 class HomeController extends GetxController {
-  late VideoPlayerController controller;
+  VideoPlayerController? controller;
   final ApiService _apiService = ApiService.instance;
   ApiResponse<CategoriesModel?> categoriesModel =
       ApiResponse<CategoriesModel?>();
+  bool isPlaying = false;
+
+  String? videoUrl;
+  Timer? _timer;
+
   @override
-  void onInit() {
+  void onInit() async {
+    await initLocation(); // 👈 FIX
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
     fetchCategories();
 
-    controller = VideoPlayerController.networkUrl(
-      Uri.parse(
-        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      ),
-    );
+    try {
+      await _apiService.get<dynamic>(
+        ApiEndpoints.teaserVideo,
+        parser: (data) => videoUrl = data['data']['url'],
+      );
 
-    controller
-        .initialize()
-        .then((_) {
-          controller.play();
-          update();
-        })
-        .catchError((error) {
-          print('Video initialization failed: $error');
+      if (videoUrl != null) {
+        controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl!))
+          ..initialize().then((value) {
+            controller?.play();
+            controller?.setLooping(true);
+            update();
+          });
+
+        controller?.addListener(() {
+          update(); // rebuilds GetBuilder when position changes
         });
+
+        // controller!.play();
+      }
+    } catch (e) {
+      log("Video init error : $e");
+    }
+
     super.onInit();
   }
 
+  Future<void> initLocation() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      log("-----------------LocationPermission.denied");
+
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      log("--------------------LOCATION PERMISSION DENIED FOREVER");
+      return;
+    }
+
+    // Permission granted → start timer
+    startLocationUpdates();
+  }
+
+  void startLocationUpdates() {
+    log("-----------------startLocationUpdates");
+
+    Timer.periodic(const Duration(minutes: 1), (timer) async {
+      log("-----------------timer------>${timer.tick}");
+
+      await _sendLocationToServer();
+    });
+  }
+
+  void stopLocationUpdates() {
+    _timer?.cancel();
+  }
+
+  Future<void> _sendLocationToServer() async {
+    log("-----------------_sendLocationToServer");
+
+    try {
+      Position pos = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      final lat = pos.latitude;
+      final lon = pos.longitude;
+
+      log("Sending: LAT: $lat | LON: $lon");
+
+      // 👇 Your API call
+
+      if (HiveService().getValue(HiveService.userId) != null) {
+        UserData userData = UserData.fromJson(
+          jsonDecode(HiveService().getValue(HiveService.userData)),
+        );
+        ApiService.instance.put(
+          '${ApiEndpoints.updateUser}${HiveService().getValue(HiveService.userId)}',
+          data: {
+            "firmName": userData.firmName,
+            "latitude": lat,
+            "longitude": lon,
+          },
+        );
+      }
+    } catch (e) {
+      print("Location error: $e");
+    }
+  }
+
+  void togglePlayPause() {
+    if (controller?.value.isPlaying ?? false) {
+      controller?.pause();
+      isPlaying = false;
+    } else {
+      controller?.play();
+      isPlaying = true;
+    }
+
+    update();
+  }
+
   void pause() {
-    if (controller.value.isInitialized && controller.value.isPlaying) {
-      controller.pause();
+    if (controller != null && controller!.value.isInitialized) {
+      controller!.pause();
       update();
     }
   }
 
   void play() {
-    if (controller.value.isInitialized && !controller.value.isPlaying) {
-      controller.play();
+    if (controller != null && controller!.value.isInitialized) {
+      controller!.play();
+      update();
     }
   }
 
@@ -70,7 +173,7 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
-    controller.dispose();
+    controller?.dispose();
     super.onClose();
   }
 }

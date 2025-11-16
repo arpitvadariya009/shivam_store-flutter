@@ -1,27 +1,31 @@
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+// import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shivam_stores/back_ground_service.dart';
 import 'package:shivam_stores/core/routes/app_routes.dart';
 import 'package:shivam_stores/core/utils/app_colors.dart';
+import 'package:shivam_stores/services/api_endpoints.dart';
 import 'package:shivam_stores/services/api_services.dart';
 import 'package:shivam_stores/services/hive_service.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // await AndroidAlarmManager.initialize();
-  await BackgroundLocation.ensurePermissionsReady();
+  await BackgroundLocation.ensurePermissionsReady(requestIfNeeded: false);
   await BackgroundLocation.getLocationInBackground();
-  // await BackgroundLocation.addScheduler();
+  await BackgroundLocation.requestPermission();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+    overlays: [SystemUiOverlay.top],
+  );
   await HiveService().init();
+
   Get.put<ApiService>(ApiService(), permanent: true);
 
   runApp(const MyApp());
@@ -42,7 +46,6 @@ class MyApp extends StatelessWidget {
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [AppColors.navyBlueColor, AppColors.darkBlueColor],
-
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),

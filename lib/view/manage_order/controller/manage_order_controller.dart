@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -14,13 +15,19 @@ import 'package:shivam_stores/view/manage_order/model/manage_order_model.dart';
 class ManageOrderController extends GetxController {
   final ApiService _apiService = ApiService.instance;
   ApiResponse<ManageOrderModel?> orderModel = ApiResponse<ManageOrderModel?>();
-  int buttonIndex = 0;
+  int? buttonIndex;
+
+  String? value;
   String? selectedCategoryName;
   String? statusID;
   List categoryName = jsonDecode(HiveService().getValue(HiveService.category));
   @override
   void onInit() {
-    fetchOrder(date: DateTime.now());
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+    fetchOrder();
     super.onInit();
   }
 
@@ -31,6 +38,7 @@ class ManageOrderController extends GetxController {
     DateTime? date,
     String? statusFilter = "",
     String? category = "",
+    bool? hideApi,
   }) async {
     LoaderService.instance.show(context);
     dynamic temp;
@@ -47,7 +55,10 @@ class ManageOrderController extends GetxController {
     } else {
       await showToast(message: response.data['message'] ?? "");
     }
-    fetchOrder(date: date, status: statusFilter, category: category);
+
+    if (!(hideApi ?? false)) {
+      fetchOrder(date: date, status: statusFilter, category: category);
+    }
     update();
     Get.back();
   }
@@ -63,11 +74,11 @@ class ManageOrderController extends GetxController {
       "-------HiveService().getValue(HiveService.userId)--->${HiveService().getValue(HiveService.userId).toString()}",
     );
     print(
-      "-------uri--->${ApiEndpoints.allGroupedOrders}?status=$status&category=$category&date=${date == null ? "" : DateFormat('yyyy-MM-dd').format(date!)}",
+      "-------uri--->${ApiEndpoints.allGroupedOrders}?status=$status&category=${category ?? ''}&date=${date == null ? "" : DateFormat('yyyy-MM-dd').format(date)}",
     );
 
     final response = await _apiService.get<ManageOrderModel?>(
-      "${ApiEndpoints.allGroupedOrders}?status=$status&category=$category&date=${date == null ? "" : DateFormat('yyyy-MM-dd').format(date!)}",
+      "${ApiEndpoints.allGroupedOrders}?status=$status&category=${category ?? ''}&date=${date == null ? "" : DateFormat('yyyy-MM-dd').format(date)}",
       parser: (data) {
         print("------------------>data---->${data}");
 

@@ -5,7 +5,7 @@ import 'package:shivam_stores/core/widget/spacing.dart';
 import 'package:shivam_stores/core/widget/text_widget.dart';
 
 class ButtonWidget extends StatelessWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final String title;
   final Color? bgColor;
   final Color? textcolor;
@@ -18,9 +18,11 @@ class ButtonWidget extends StatelessWidget {
   final Widget? leadingWidget;
   final Gradient? gradient;
   final DecorationImage? image;
+
+  final void Function(TapDownDetails)? onTapDown;
   const ButtonWidget({
     Key? key,
-    required this.onTap,
+    this.onTap,
     required this.title,
     this.bgColor,
     this.textcolor,
@@ -33,12 +35,14 @@ class ButtonWidget extends StatelessWidget {
     this.leadingWidget,
     this.gradient,
     this.image,
+    this.onTapDown,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      onTapDown: onTapDown,
       child: Container(
         height: height ?? 50,
         width: width,

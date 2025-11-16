@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shivam_stores/core/utils/loader_service.dart';
 import 'package:shivam_stores/core/utils/toast_utils.dart';
@@ -17,6 +18,10 @@ class OrdersController extends GetxController {
   String? statusID;
   @override
   void onInit() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
     fetchOrder();
     super.onInit();
   }
@@ -29,8 +34,14 @@ class OrdersController extends GetxController {
     );
     final response = await _apiService.get<OrderModel?>(
       '${ApiEndpoints.groupedOrders}?userId=${HiveService().getValue(HiveService.userId)}',
-      parser: (data) => OrderModel.fromJson(data),
+      parser: (data) {
+        log("----------data--->${data}");
+
+        return OrderModel.fromJson(data);
+      },
     );
+
+    log("----------response--->${response}");
 
     orderModel = response;
     update();

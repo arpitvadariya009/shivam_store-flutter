@@ -1,14 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shivam_stores/model/api_response_model.dart';
 import 'package:shivam_stores/services/api_endpoints.dart';
 import 'package:shivam_stores/services/api_services.dart';
 import 'package:shivam_stores/services/hive_service.dart';
-import 'package:shivam_stores/view/home/model/categories_model.dart';
 import 'package:shivam_stores/view/shop/model/product_detail_model.dart';
-
 import '../../../core/utils/app_colors.dart';
 
 class ShopDetailController extends GetxController {
@@ -22,6 +21,10 @@ class ShopDetailController extends GetxController {
   String? title = "";
   @override
   void onInit() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
     try {
       id = Get.arguments['id'];
       title = Get.arguments['title'];
@@ -34,8 +37,6 @@ class ShopDetailController extends GetxController {
     } else {
       fetchProduct();
     }
-    log("---------------id---->${id}");
-    log("---------------title---->${title}");
     super.onInit();
   }
 
@@ -62,8 +63,12 @@ class ShopDetailController extends GetxController {
     update(); // Update UI to show loading
 
     final response = await _apiService.get<ProductsDetailModel?>(
-      '${ApiEndpoints.getProducts}?subCategoryId=$id',
+      '${ApiEndpoints.getProducts}?subCategoryId=$id&userId=${HiveService().getValue(HiveService.userId)}',
       parser: (data) => ProductsDetailModel.fromJson(data),
+    );
+
+    log(
+      "----------------ids here -->${ApiEndpoints.getProducts}?subCategoryId=$id",
     );
 
     productsModel = response;

@@ -73,4 +73,10 @@ class AppColors {
   static const Color textA0DAFEColor = Color(0xffA0DAFE);
   static const Color textFAFFBFColor = Color(0xffFAFFBF);
   static const Color textFFB7F9Color = Color(0xffFFB7F9);
+  static const Color inprogress1Color = Color(0xff44FF00);
+  static const Color inprogress2Color = Color(0xff44FF00);
+  static const Color penddingColor = Color(0xff5100FF);
+  static const Color availableColor = Color(0xff77FF00);
+  static const Color outoffStockColor = Color(0xffF95454);
+  static const Color cartTxtFiledColor = Color(0xffFF5AFC);
 }

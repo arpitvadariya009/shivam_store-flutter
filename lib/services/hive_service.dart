@@ -7,6 +7,7 @@ class HiveService {
   static const String isStaff = 'isStaff';
   static const String userData = 'userData';
   static const String location = 'location';
+  static const String isverified = 'isverified';
   static final HiveService _instance = HiveService._internal();
   factory HiveService() => _instance;
   HiveService._internal();

@@ -1,8 +1,10 @@
 class ApiEndpoints {
   // static const String baseUrl = "http://192.168.29.63:6000/api/v1/";
   // static const String imageUrl = "http://192.168.29.63:6000/uploads/";
-  static const String baseUrl = "http://194.238.17.199:6000/api/v1/";
-  static const String imageUrl = "http://194.238.17.199:6000/uploads/";
+  static const String baseUrl = "https://yummyburp.in/api/v1/";
+  static const String imageUrl = "https://yummyburp.in/uploads/";
+  // static const String baseUrl = "http://194.238.17.199:6000/api/v1/";
+  // static const String imageUrl = "http://194.238.17.199:6000/uploads/";
   static const String login = "login";
   static const String register = "register";
   static const String createCategory = "createCategory";
@@ -20,6 +22,10 @@ class ApiEndpoints {
   static const String createFavorite = "createFavorite";
   static const String deleteFavorite = "deleteFavorite";
   static const String getToCart = "get-to-cart?userId=";
+  static const String getToOrder = "get-to-order?orderId=";
   static const String placeOrder = "place-order";
   static const String allGroupedOrders = "all/grouped-orders";
+  static const String teaserVideo = "teaser-video";
+  static const String getToAvailable = "get-to-available";
+  static const String updateUser = "update/user?userId=";
 }

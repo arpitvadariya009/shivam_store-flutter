@@ -165,7 +165,8 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child:
-                        c.controller.value.isInitialized
+                        (c.controller != null &&
+                                c.controller!.value.isInitialized)
                             ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -202,33 +203,84 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Center(
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 10,
-                                      ),
-                                      margin: EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                        vertical: 10,
-                                      ),
-
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: AppColors.whiteColor.withOpacity(
-                                          0.1,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Center(
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 10,
+                                          ),
+                                          margin: const EdgeInsets.symmetric(
+                                            horizontal: 20,
+                                            vertical: 10,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              5,
+                                            ),
+                                            color: Colors.white.withOpacity(
+                                              0.1,
+                                            ),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              5,
+                                            ),
+                                            child: AspectRatio(
+                                              aspectRatio:
+                                                  c
+                                                      .controller!
+                                                      .value
+                                                      .aspectRatio,
+                                              child: VideoPlayer(c.controller!),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(5),
 
-                                        child: AspectRatio(
-                                          aspectRatio:
-                                              c.controller.value.aspectRatio,
-                                          child: VideoPlayer(c.controller),
+                                      // 🔹 Play / Pause button
+                                      GestureDetector(
+                                        onTap: c.togglePlayPause,
+                                        child: AnimatedOpacity(
+                                          opacity:
+                                              c.controller!.value.isPlaying
+                                                  ? 0.0
+                                                  : 1.0,
+                                          duration: const Duration(
+                                            milliseconds: 300,
+                                          ),
+                                          child: Container(
+                                            color: Colors.black26,
+                                            child: const Icon(
+                                              Icons.play_circle_fill,
+                                              color: Colors.white,
+                                              size: 70,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
+
+                                      // 🔹 Smooth Progress bar
+                                      Positioned(
+                                        bottom: 5,
+                                        left: 0,
+                                        right: 0,
+                                        child: VideoProgressIndicator(
+                                          c.controller!,
+                                          allowScrubbing: true,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                          ),
+                                          colors: const VideoProgressColors(
+                                            playedColor: Colors.blueAccent,
+                                            bufferedColor: Colors.white54,
+                                            backgroundColor: Colors.black26,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],

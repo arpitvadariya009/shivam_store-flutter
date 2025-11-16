@@ -59,14 +59,14 @@ class ApiService extends GetxService {
     Map<String, dynamic>? queryParameters,
     T Function(dynamic)? parser,
   }) async {
-    log("----------get api--->");
+    print("----------get api--->${endpoint}");
 
     try {
       final response = await _dio.get(
         endpoint,
         queryParameters: queryParameters,
       );
-      log("----------response.data--->${response.data}");
+      print("----------response.data--->${response.data}");
 
       if (response.statusCode == 200) {
         final data =
@@ -106,12 +106,14 @@ class ApiService extends GetxService {
     T Function(dynamic)? parser,
   }) async {
     try {
+      print("----------------->data----${data}");
+
       final response = await _dio.post(
         endpoint,
         data: data,
         queryParameters: queryParameters,
       );
-      print("----------------->${response.data}");
+      print("----------------->response.data${response.data}");
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData =
             parser != null ? parser(response.data) : response.data as T;
@@ -123,10 +125,16 @@ class ApiService extends GetxService {
       }
     } on DioException catch (e) {
       print("-----------------DioException>${e}");
+      final res = e.response?.data;
+
+      if (res is Map && res['message'] != null) {
+        return ApiResponse<T>().failure(res['message'].toString());
+      }
 
       return ApiResponse<T>().failure(_handleDioError(e));
+      // return ApiResponse<T>().failure(_handleDioError(e));
     } catch (e) {
-      print("----------------->${e}");
+      print("----------------->api e----- ${e}");
 
       return ApiResponse<T>().failure('Unexpected error: $e');
     }

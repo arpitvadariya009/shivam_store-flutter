@@ -31,7 +31,11 @@ class CartData {
   String? subCategoryId;
   String? image;
   int? setSize;
+  String? media;
+  String? mediaType;
   int? type;
+  String? categoryId;
+
   List<Variant>? variants;
 
   CartData({
@@ -43,6 +47,9 @@ class CartData {
     this.variants,
     this.isFavorite,
     this.type,
+    this.categoryId,
+    this.media,
+    this.mediaType,
   });
 
   factory CartData.fromJson(Map<String, dynamic> json) => CartData(
@@ -52,6 +59,9 @@ class CartData {
     image: json["image"],
     setSize: json["setSize"],
     isFavorite: json["isFavorite"],
+    categoryId: json["categoryId"],
+    media: json["media"],
+    mediaType: json["mediaType"],
     type: json["type"],
     variants:
         json["variants"] == null
@@ -69,6 +79,9 @@ class CartData {
     "setSize": setSize,
     "isFavorite": isFavorite,
     "type": type,
+    "categoryId": categoryId,
+    "media": media,
+    "mediaType": mediaType,
     "variants": List<dynamic>.from(variants!.map((x) => x.toJson())),
   };
 }
@@ -77,14 +90,27 @@ class Variant {
   String? name;
   bool? available;
   String? id;
+  int? setSize;
+  int? manageOrderStatus;
+
   int? qty = 0;
 
-  Variant({this.name, this.available, this.id, this.qty});
+  Variant({
+    this.name,
+    this.available,
+    this.setSize,
+    this.id,
+    this.qty,
+    this.manageOrderStatus,
+  });
 
   factory Variant.fromJson(Map<String, dynamic> json) => Variant(
     name: json["name"],
     available: json["available"],
     id: json["_id"],
+    setSize: json["setSize"],
+    manageOrderStatus: json["manageOrderStatus"],
+
     qty: json["quantity"],
   );
 
@@ -92,6 +118,9 @@ class Variant {
     "name": name,
     "available": available,
     "_id": id,
+    "setSize": setSize,
+
     "quantity": qty,
+    "manageOrderStatus": manageOrderStatus,
   };
 }

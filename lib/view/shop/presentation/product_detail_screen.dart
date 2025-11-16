@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
@@ -14,6 +16,7 @@ import 'package:shivam_stores/core/widget/text_widget.dart';
 import 'package:shivam_stores/view/home/controller/home_controller.dart';
 import 'package:shivam_stores/view/shop/controller/product_detail_controller.dart';
 import 'package:shivam_stores/view/shop/model/product_detail_model.dart';
+import 'package:shivam_stores/view/shop/presentation/shop_detail_screen.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen({super.key});
@@ -69,15 +72,29 @@ class ProductDetailScreen extends StatelessWidget {
         width: double.infinity,
         decoration:
             Get.find<ProductDetailController>().title.contains("FAVORITE") ||
-                    Get.find<ProductDetailController>().title.contains("CART")
+                    Get.find<ProductDetailController>().title.contains(
+                      "CART",
+                    ) ||
+                    Get.find<ProductDetailController>().title.contains(
+                      "MANAGE ORDERS",
+                    )
                 ? BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Get.find<ProductDetailController>().title.contains("CART")
-                          ? AppColors.blue004037CColor
-                          : AppColors.yellow394002CColor,
-                      AppColors.blackColor,
-                    ],
+                    colors:
+                        Get.find<ProductDetailController>().title.contains(
+                              "MANAGE ORDERS",
+                            )
+                            ? [
+                              AppColors.button2C0203Color,
+                              AppColors.blackColor,
+                            ]
+                            : [
+                              Get.find<ProductDetailController>().title
+                                      .contains("CART")
+                                  ? AppColors.blue004037CColor
+                                  : AppColors.yellow394002CColor,
+                              AppColors.blackColor,
+                            ],
 
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -90,369 +107,500 @@ class ProductDetailScreen extends StatelessWidget {
               controller: PageController(initialPage: c.index ?? 0),
               scrollDirection: Axis.horizontal,
               itemCount: c.categoriesModel?.data?.length,
+
               itemBuilder: (context, index) {
                 final product = c.categoriesModel?.data?[index];
-                return SizedBox(
-                  width: width,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: double.infinity,
-                        child: netWorkImage(
-                          imageUrl: product?.image ?? "",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      // Right Control Panel
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: ListView(
-                                  children: [
-                                    for (
-                                      int i = 0;
-                                      i < (product?.variants ?? []).length;
-                                      i++
-                                    ) ...[
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: AppColors.darkGreyColor,
-                                          ),
-                                        ),
+                final isVideo = product?.mediaType == "video";
+                return Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 7,
+                      child: GestureDetector(
+                        onDoubleTapDown: (details) {
+                          c.doubleTapDetails = details; // Save tap position
+                        },
+                        onDoubleTap: () {
+                          final controller = c.transformationController;
+                          final position = c.doubleTapDetails?.localPosition;
+                          const double zoomScale = 2.0;
+                          if (controller.value != Matrix4.identity()) {
+                            controller.value = Matrix4.identity();
+                          } else {
+                            final x = -position!.dx * (zoomScale - 1);
+                            final y = -position.dy * (zoomScale - 1);
+                            controller.value =
+                                Matrix4.identity()
+                                  ..translate(x, y)
+                                  ..scale(zoomScale);
+                          }
+                        },
+                        child: InteractiveViewer(
+                          minScale: 0.5,
 
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                          panEnabled: true, // Allow drag when zoomed
+                          scaleEnabled: true, // Allow pinch zoom
+                          maxScale: 4.0,
 
-                                          children: [
-                                            AppSpacing.w10,
-                                            cText(
-                                              value:
-                                                  product?.variants?[i].name ??
-                                                  "",
-                                              color: AppColors.whiteColor,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 20,
-                                            ),
+                          clipBehavior: Clip.none,
+                          transformationController: c.transformationController,
 
-                                            GestureDetector(
-                                              onTap: () {
-                                                if (product
-                                                        ?.variants?[i]
-                                                        .available ==
-                                                    true) {
-                                                  if ((product!
-                                                              .variants![i]
-                                                              .qty ??
-                                                          0) >
-                                                      0) {
-                                                    product.variants![i].qty =
-                                                        (product
-                                                                .variants![i]
-                                                                .qty ??
-                                                            0) -
-                                                        (product.setSize ?? 0);
-                                                    c.addToCart(
-                                                      varinat:
-                                                          product.variants?[i],
-                                                      productCode:
-                                                          product.code ?? "",
-                                                      productId:
-                                                          product.id ?? "",
-                                                      increment:
-                                                          '-${product.setSize ?? "0"}',
-                                                    );
-                                                    c.update();
-                                                  }
-                                                }
-                                              },
-                                              child: Container(
-                                                height: 40,
-                                                width: 40,
-                                                color: Colors.transparent,
-                                                alignment: Alignment.center,
-                                                child: Icon(
-                                                  Icons.remove,
-                                                  color: AppColors.redColor,
-                                                ),
-                                              ),
-                                            ),
-
-                                            Flexible(
-                                              child: Center(
-                                                child: cText(
-                                                  value:
-                                                      product
-                                                                  ?.variants?[i]
-                                                                  .available ==
-                                                              true
-                                                          ? (product!
-                                                                      .variants![i]
-                                                                      .qty ??
-                                                                  0)
-                                                              .toString()
-                                                          : 'N/A',
-                                                  color: AppColors.whiteColor,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 20,
-                                                  textAlign: TextAlign.center,
-
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                            ),
-
-                                            GestureDetector(
-                                              onTap: () {
-                                                if (product
-                                                        ?.variants?[i]
-                                                        .available ==
-                                                    true) {
-                                                  product?.variants![i].qty =
-                                                      (product
-                                                              .variants![i]
-                                                              .qty ??
-                                                          0) +
-                                                      (product.setSize ?? 0);
-
-                                                  c.addToCart(
-                                                    varinat:
-                                                        product?.variants?[i],
-                                                    productCode:
-                                                        product?.code ?? "",
-                                                    increment:
-                                                        (product?.setSize ??
-                                                                "0")
-                                                            .toString(),
-                                                    productId:
-                                                        product?.id ?? "",
-                                                  );
-                                                  c.update();
-                                                }
-                                              },
-                                              child: Container(
-                                                height: 40,
-                                                width: 40,
-                                                color:
-                                                    product
-                                                                    ?.variants?[i]
-                                                                    .available ==
-                                                                true &&
-                                                            (product!
-                                                                        .variants![i]
-                                                                        .qty ??
-                                                                    0) >
-                                                                0
-                                                        ? AppColors
-                                                            .powderPurpleColor
-                                                        : AppColors
-                                                            .darkGreyColor,
-                                                child: Icon(
-                                                  Icons.add,
-                                                  color: AppColors.blackColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      AppSpacing.h10,
-                                    ],
-                                  ],
-                                ),
-                              ),
-                              AppSpacing.h5,
-
-                              ButtonWidget(
-                                onTap: () {
-                                  if (product?.isFavorite == null ||
-                                      product?.isFavorite == false) {
-                                    product?.isFavorite = true;
-                                  } else {
-                                    product?.isFavorite = false;
-                                  }
-                                  c.update();
-
-                                  c.addToFavorite(
-                                    productId: product?.id ?? "",
-                                    isFavorite: product?.isFavorite ?? false,
-                                  );
-                                },
-                                title:
-                                    product?.type == 0
-                                        ? "NEW"
-                                        : product?.type == 1
-                                        ? "TRENDING"
-                                        : product?.type == 2
-                                        ? "EVER GREEN"
-                                        : product?.type == 3
-                                        ? "Extra 5% Discount"
-                                        : product?.type == 4
-                                        ? "PREMIUM"
-                                        : "",
-                                leadingWidget: SvgPicture.asset(
-                                  product?.isFavorite == true
-                                      ? "assets/image/star_fill.svg"
-                                      : "assets/image/star.svg",
-                                ),
-                                textcolor: AppColors.whiteColor,
-                                fontWeight: FontWeight.w900,
-                                borderRadius: 0,
-                                fontSize: 20,
-                                image:
-                                    product?.type == 4
-                                        ? DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage(
-                                            'assets/image/button_bg.png',
-                                          ),
-                                        )
-                                        : null,
-                                gradient:
-                                    product?.type == 0
-                                        ? LinearGradient(
-                                          colors: [
-                                            AppColors.blackColor,
-                                            AppColors.lightRedColor.withOpacity(
-                                              0.60,
-                                            ),
-                                            AppColors.yellowFDF507Color
-                                                .withOpacity(0.60),
-                                            AppColors.pinkF208ACColor
-                                                .withOpacity(0.40),
-                                            AppColors.blue0800FFCColor
-                                                .withOpacity(0.40),
-                                            AppColors.green2AFF00CColor
-                                                .withOpacity(0.40),
-                                            AppColors.teal04FFCDCColor
-                                                .withOpacity(0.60),
-                                          ],
-                                          stops: [
-                                            0.18,
-                                            0.42,
-                                            0.55,
-                                            0.70,
-                                            0.79,
-                                            0.90,
-                                            1,
-                                          ],
-                                        )
-                                        : product?.type == 1
-                                        ? LinearGradient(
-                                          colors: [
-                                            AppColors.blackColor,
-                                            AppColors.blackColor,
-                                            AppColors.buttonBB1515Color,
-                                          ],
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                        )
-                                        : product?.type == 2
-                                        ? LinearGradient(
-                                          colors: [
-                                            AppColors.blackColor,
-                                            AppColors.blackColor,
-                                            AppColors.button009E15Color,
-                                          ],
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                        )
-                                        : product?.type == 3
-                                        ? LinearGradient(
-                                          colors: [
-                                            AppColors.blackColor,
-                                            AppColors.blackColor,
-                                            AppColors.button2C1EEFColor,
-                                          ],
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                        )
-                                        : null,
-                              ),
-                              AppSpacing.h24,
-                            ],
+                          child: SizedBox(
+                            height: double.infinity,
+                            child:
+                                isVideo
+                                    ? VideoPlayerWidget(
+                                      url: product?.media ?? "",
+                                      isPlayPuase: true,
+                                      autoPlay: true,
+                                    )
+                                    : netWorkImage(
+                                      imageUrl: product?.media ?? "",
+                                      fit: BoxFit.contain,
+                                    ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: ListView(
+                                shrinkWrap: true,
+
+                                children: [
+                                  for (
+                                    int i = 0;
+                                    i < (product?.variants ?? []).length;
+                                    i++
+                                  ) ...[
+                                    Container(
+                                      padding: EdgeInsets.only(left: 20),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: AppColors.darkGreyColor,
+                                        ),
+                                      ),
+
+                                      child:
+                                          (c.title.contains('MANAGE ORDERS'))
+                                              ? Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                spacing: 10,
+                                                children: [
+                                                  cText(
+                                                    value:
+                                                        product
+                                                            ?.variants?[i]
+                                                            .name ??
+                                                        "",
+                                                    color: AppColors.whiteColor,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 20,
+                                                  ),
+
+                                                  GestureDetector(
+                                                    onTap: () {},
+                                                    child: Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      color: Colors.transparent,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Icon(
+                                                        Icons.remove,
+                                                        color:
+                                                            AppColors
+                                                                .outoffStockColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Flexible(
+                                                    child: cText(
+                                                      value:
+                                                          (product!
+                                                                      .variants![i]
+                                                                      .qty ??
+                                                                  0)
+                                                              .toString(),
+                                                      color:
+                                                          AppColors.whiteColor,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 20,
+                                                      textAlign:
+                                                          TextAlign.center,
+
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      product
+                                                          .variants?[i]
+                                                          .available = !(product
+                                                                  .variants?[i]
+                                                                  .available ??
+                                                              false);
+                                                      c.outOfStock(
+                                                        productId:
+                                                            product.id ?? '',
+                                                        variantId:
+                                                            product
+                                                                .variants?[i]
+                                                                .id ??
+                                                            '',
+                                                        available:
+                                                            product
+                                                                .variants?[i]
+                                                                .available ??
+                                                            false,
+                                                      );
+
+                                                      c.update();
+                                                    },
+                                                    child: Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      color:
+                                                          product
+                                                                      ?.variants?[i]
+                                                                      .available ??
+                                                                  false
+                                                              ? AppColors
+                                                                  .outoffStockColor
+                                                              : AppColors
+                                                                  .boxBgColor
+                                                                  .withOpacity(
+                                                                    0.2,
+                                                                  ),
+                                                      alignment:
+                                                          Alignment.center,
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                              : Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+
+                                                children: [
+                                                  cText(
+                                                    value:
+                                                        product
+                                                            ?.variants?[i]
+                                                            .name ??
+                                                        "",
+                                                    color: AppColors.whiteColor,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 20,
+                                                  ),
+
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      log(
+                                                        "------->minus ----->${product?.variants?[i].available}",
+                                                      );
+                                                      if (product
+                                                              ?.variants?[i]
+                                                              .available ==
+                                                          true) {
+                                                        if ((product!
+                                                                    .variants![i]
+                                                                    .qty ??
+                                                                0) >
+                                                            0) {
+                                                          product
+                                                              .variants![i]
+                                                              .qty = (product
+                                                                      .variants![i]
+                                                                      .qty ??
+                                                                  0) -
+                                                              (product
+                                                                      .variants?[i]
+                                                                      .setSize ??
+                                                                  0);
+                                                          c.addToCart(
+                                                            varinat:
+                                                                product
+                                                                    .variants?[i],
+                                                            productCode:
+                                                                product.code ??
+                                                                "",
+                                                            productId:
+                                                                product.id ??
+                                                                "",
+                                                            increment:
+                                                                -(product
+                                                                        .variants?[i]
+                                                                        .setSize ??
+                                                                    0),
+                                                          );
+                                                          c.update();
+                                                        }
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      color: Colors.transparent,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Icon(
+                                                        Icons.remove,
+                                                        color:
+                                                            AppColors.redColor,
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  Flexible(
+                                                    child: cText(
+                                                      value:
+                                                          (c.title.contains(
+                                                                'MANAGE ORDERS',
+                                                              ))
+                                                              ? (product!
+                                                                          .variants![i]
+                                                                          .qty ??
+                                                                      0)
+                                                                  .toString()
+                                                              : product
+                                                                      ?.variants?[i]
+                                                                      .available ==
+                                                                  true
+                                                              ? (product!
+                                                                          .variants![i]
+                                                                          .qty ??
+                                                                      0)
+                                                                  .toString()
+                                                              : 'N/A',
+                                                      color:
+                                                          AppColors.whiteColor,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 20,
+                                                      textAlign:
+                                                          TextAlign.center,
+
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      if (product
+                                                              ?.variants?[i]
+                                                              .available ==
+                                                          true) {
+                                                        product
+                                                            ?.variants![i]
+                                                            .qty = (product
+                                                                    .variants![i]
+                                                                    .qty ??
+                                                                0) +
+                                                            (product
+                                                                    .variants?[i]
+                                                                    .setSize ??
+                                                                0);
+                                                        log(
+                                                          "-------product?.setSize --->${product?.variants?[i].setSize}",
+                                                        );
+                                                        c.addToCart(
+                                                          varinat:
+                                                              product
+                                                                  ?.variants?[i],
+                                                          productCode:
+                                                              product?.code ??
+                                                              "",
+                                                          increment:
+                                                              product
+                                                                  ?.variants?[i]
+                                                                  .setSize ??
+                                                              0,
+                                                          productId:
+                                                              product?.id ?? "",
+                                                        );
+                                                        c.update();
+                                                      }
+                                                    },
+                                                    child: Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      color:
+                                                          product?.variants?[i].available ==
+                                                                      true &&
+                                                                  (product!.variants![i].qty ??
+                                                                          0) >
+                                                                      0
+                                                              ? AppColors
+                                                                  .powderPurpleColor
+                                                              : AppColors
+                                                                  .darkGreyColor,
+                                                      child: Icon(
+                                                        Icons.add,
+                                                        color:
+                                                            AppColors
+                                                                .blackColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                    ),
+
+                                    AppSpacing.h10,
+                                  ],
+                                ],
+                              ),
+                            ),
+                            AppSpacing.h5,
+
+                            ButtonWidget(
+                              onTap: () {
+                                if (product?.isFavorite == null ||
+                                    product?.isFavorite == false) {
+                                  product?.isFavorite = true;
+                                } else {
+                                  product?.isFavorite = false;
+                                }
+                                c.update();
+
+                                c.addToFavorite(
+                                  productId: product?.id ?? "",
+                                  isFavorite: product?.isFavorite ?? false,
+                                );
+                              },
+                              title:
+                                  product?.type == 0
+                                      ? "NEW"
+                                      : product?.type == 1
+                                      ? "TRENDING"
+                                      : product?.type == 2
+                                      ? "EVER GREEN"
+                                      : product?.type == 3
+                                      ? "Extra 5% Discount"
+                                      : product?.type == 4
+                                      ? "PREMIUM"
+                                      : product?.type == 5
+                                      ? "Add To Wish List"
+                                      : product?.type == 6
+                                      ? "Limited Stock"
+                                      : "",
+                              leadingWidget: SvgPicture.asset(
+                                product?.isFavorite == true
+                                    ? "assets/image/star_fill.svg"
+                                    : "assets/image/star.svg",
+                              ),
+                              textcolor: AppColors.whiteColor,
+                              fontWeight: FontWeight.w900,
+                              borderRadius: 0,
+                              fontSize: 20,
+                              image:
+                                  product?.type == 4
+                                      ? DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: AssetImage(
+                                          'assets/image/button_bg.png',
+                                        ),
+                                      )
+                                      : null,
+                              gradient:
+                                  product?.type == 0 || product?.type == 6
+                                      ? LinearGradient(
+                                        colors: [
+                                          AppColors.blackColor,
+                                          AppColors.lightRedColor.withOpacity(
+                                            0.60,
+                                          ),
+                                          AppColors.yellowFDF507Color
+                                              .withOpacity(0.60),
+                                          AppColors.pinkF208ACColor.withOpacity(
+                                            0.40,
+                                          ),
+                                          AppColors.blue0800FFCColor
+                                              .withOpacity(0.40),
+                                          AppColors.green2AFF00CColor
+                                              .withOpacity(0.40),
+                                          AppColors.teal04FFCDCColor
+                                              .withOpacity(0.60),
+                                        ],
+                                        stops: [
+                                          0.18,
+                                          0.42,
+                                          0.55,
+                                          0.70,
+                                          0.79,
+                                          0.90,
+                                          1,
+                                        ],
+                                      )
+                                      : product?.type == 1
+                                      ? LinearGradient(
+                                        colors: [
+                                          AppColors.blackColor,
+                                          AppColors.blackColor,
+                                          AppColors.buttonBB1515Color,
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      )
+                                      : product?.type == 2
+                                      ? LinearGradient(
+                                        colors: [
+                                          AppColors.blackColor,
+                                          AppColors.blackColor,
+                                          AppColors.button009E15Color,
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      )
+                                      : product?.type == 3
+                                      ? LinearGradient(
+                                        colors: [
+                                          AppColors.blackColor,
+                                          AppColors.blackColor,
+                                          AppColors.button2C1EEFColor,
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      )
+                                      : product?.type == 5
+                                      ? LinearGradient(
+                                        colors: [
+                                          AppColors.navyBlueColor,
+                                          AppColors.darkBlueColor,
+                                        ],
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                      )
+                                      : null,
+                            ),
+                            AppSpacing.h24,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 );
               },
             );
           },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildQuantityRow(
-    String label,
-    String value, {
-    required void Function() onRemoveTap,
-    required void Function() onAddTap,
-  }) {
-    return Row(
-      children: [
-        cText(
-          value: label,
-          color: AppColors.whiteColor,
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
-        ),
-        AppSpacing.w10,
-        _buildCounter(
-          value: value,
-          onAddTap: onAddTap,
-          onRemoveTap: onRemoveTap,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCounter({
-    required String value,
-    required void Function() onRemoveTap,
-    required void Function() onAddTap,
-  }) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.whiteColor),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButtonWidget(
-              onTap: onRemoveTap,
-              icon: Icons.remove,
-              borderRadius: 30,
-              size: 30,
-              iconColor: AppColors.redColor,
-              bgColor: AppColors.whiteColor,
-            ),
-            cText(value: value, color: AppColors.whiteColor),
-            IconButtonWidget(
-              onTap: onAddTap,
-              icon: Icons.add,
-              borderRadius: 30,
-              size: 30,
-              iconColor: AppColors.blackColor,
-              bgColor:
-                  value == "0" || value == "N/A"
-                      ? AppColors.darkGreyColor
-                      : AppColors.powderPurpleColor,
-            ),
-          ],
         ),
       ),
     );

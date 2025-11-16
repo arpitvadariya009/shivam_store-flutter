@@ -1,9 +1,16 @@
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+// import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:android_intent_plus/android_intent.dart';
+import 'package:shivam_stores/services/api_endpoints.dart';
+import 'package:shivam_stores/services/api_services.dart';
 import 'package:shivam_stores/services/hive_service.dart';
+import 'package:shivam_stores/view/auth/model/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 @pragma('vm:entry-point') // Required for background isolates
@@ -17,27 +24,38 @@ class BackgroundLocation {
   }
 
   /// Request permissions and ensure they are granted
-  static Future<bool> ensurePermissionsReady() async {
+  static Future<bool> ensurePermissionsReady({
+    bool requestIfNeeded = false,
+  }) async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       print("🔴 Location service not enabled");
-      await Geolocator.openLocationSettings();
+      if (requestIfNeeded) {
+        await Geolocator.openLocationSettings();
+      }
       return false;
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
-      permission = await Geolocator.requestPermission();
+      if (requestIfNeeded) {
+        permission = await Geolocator.requestPermission();
+      } else {
+        print("⚠️ Permission denied — skipping request");
+        return false;
+      }
     }
 
     if (permission != LocationPermission.always) {
-      print("🔴 Location permission is not 'always'");
-      await Geolocator.openAppSettings(); // User must manually allow "Always"
+      print("⚠️ Not 'always' permission");
+      if (requestIfNeeded) {
+        await Geolocator.openAppSettings();
+      }
       return false;
     }
 
-    print("✅ All location permissions are set");
+    print("✅ Permissions OK");
     return true;
   }
 
@@ -119,20 +137,27 @@ class BackgroundLocation {
     }
   }
 
-  /// Schedule the task to run every 15 minutes
-  @pragma('vm:entry-point')
-  static Future<void> addScheduler() async {
-    WidgetsFlutterBinding.ensureInitialized();
-
-    // await AndroidAlarmManager.cancel(999); // Avoid duplicates
-    await AndroidAlarmManager.periodic(
-      const Duration(minutes: 1),
-      999,
-      getLocationInBackground,
-      wakeup: true,
-      exact: true,
-      rescheduleOnReboot: true,
-    );
-    print("⏰ AlarmManager scheduled every 15 minutes");
+  static Future<void> requestPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      await Geolocator.requestPermission();
+    }
   }
+
+  /// Schedule the task to run every 15 minutes
+  // @pragma('vm:entry-point')
+  // static Future<void> addScheduler() async {
+  //   WidgetsFlutterBinding.ensureInitialized();
+
+  //   // await AndroidAlarmManager.cancel(999); // Avoid duplicates
+  //   await AndroidAlarmManager.periodic(
+  //     const Duration(minutes: 1),
+  //     999,
+  //     getLocationInBackground,
+  //     wakeup: true,
+  //     exact: true,
+  //     rescheduleOnReboot: true,
+  //   );
+  //   print("⏰ AlarmManager scheduled every 15 minutes");
+  // }
 }

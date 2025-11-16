@@ -149,14 +149,14 @@ class ProfileScreen extends StatelessWidget {
                   child: ButtonWidget(
                     onTap: () {
                       log('-----------Orders Button Tapped');
-                      if (HiveService().getValue(HiveService.isStaff) == 0) {
+                      if (HiveService().getValue(HiveService.isStaff) == 1) {
                         Get.offNamed(AppRoutes.kManageOrderScreen);
                       } else {
                         Get.offNamed(AppRoutes.kOrdersScreen);
                       }
                     },
                     title:
-                        HiveService().getValue(HiveService.isStaff) == 0
+                        HiveService().getValue(HiveService.isStaff) == 1
                             ? Strings.kManageOrders
                             : Strings.kOrders,
                     textcolor: AppColors.blackColor,
@@ -164,7 +164,7 @@ class ProfileScreen extends StatelessWidget {
                     border: Border.all(color: AppColors.blackColor),
                   ),
                 ),
-                if (HiveService().getValue(HiveService.isStaff) != 0) ...[
+                if (HiveService().getValue(HiveService.isStaff) != 1) ...[
                   AppSpacing.w10,
                   Expanded(
                     child: ButtonWidget(

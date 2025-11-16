@@ -17,10 +17,15 @@ class OrderModel {
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
     success: json["success"],
-    groupedOrders: Map.from(json["groupedOrders"]).map(
-      (k, v) =>
-          MapEntry<String, List<String>>(k, List<String>.from(v.map((x) => x))),
-    ),
+    groupedOrders:
+        json["groupedOrders"] == null
+            ? {}
+            : Map.from(json["groupedOrders"]).map(
+              (k, v) => MapEntry<String, List<String>>(
+                k,
+                List<String>.from(v.map((x) => x)),
+              ),
+            ),
   );
 
   Map<String, dynamic> toJson() => {

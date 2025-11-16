@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shivam_stores/back_ground_service.dart';
 import 'package:shivam_stores/core/routes/app_routes.dart';
 import 'package:shivam_stores/core/utils/app_colors.dart';
 import 'package:shivam_stores/core/widget/spacing.dart';
 import 'package:shivam_stores/services/hive_service.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,13 +18,37 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  int _activeIndex = 0;
+  final int _count = 4;
+  Timer? _timer;
+  final Duration _delay = const Duration(seconds: 1);
+
+  void _startAutoPlay() {
+    _timer = Timer.periodic(_delay, (_) {
+      setState(() {
+        _activeIndex = (_activeIndex + 1) % _count;
+      });
+    });
+  }
+
+  void dispose() {
+    _timer?.cancel();
+
+    super.dispose();
+  }
+
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 3), () {
+    _startAutoPlay();
+    Future.delayed(Duration(seconds: 4), () {
       if (HiveService().getValue(HiveService.userId) == null) {
         Get.offAllNamed(AppRoutes.kLoginScreen);
       } else {
-        Get.offAllNamed(AppRoutes.kHomeScreen);
+        if (HiveService().getValue(HiveService.isverified)) {
+          Get.offAllNamed(AppRoutes.kHomeScreen);
+        } else {
+          Get.offAllNamed(AppRoutes.kVerificationScreen);
+        }
       }
     });
 
@@ -59,27 +87,42 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
 
                 AppSpacing.h32,
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CircleAvatar(
-                      radius: 5,
-                      backgroundColor: AppColors.softOrangeColor,
-                    ),
 
-                    AppSpacing.w24,
-                    CircleAvatar(
-                      radius: 5,
-                      backgroundColor: AppColors.softYellowColor,
-                    ),
-                    AppSpacing.w24,
-                    CircleAvatar(
-                      radius: 5,
-                      backgroundColor: AppColors.softPinkColor,
-                    ),
-                  ],
+                AnimatedSmoothIndicator(
+                  activeIndex: _activeIndex,
+                  count: _count,
+
+                  effect: SwapEffect(
+                    dotWidth: 12,
+                    dotHeight: 12,
+                    type: SwapType.yRotation,
+                    spacing: 10,
+                    dotColor: AppColors.softOrangeColor,
+                    activeDotColor: AppColors.softPinkColor,
+                  ),
                 ),
+
+                // Row(
+                //   mainAxisSize: MainAxisSize.min,
+                //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //   children: [
+                //     CircleAvatar(
+                //       radius: 5,
+                //       backgroundColor: AppColors.softOrangeColor,
+                //     ),
+
+                //     AppSpacing.w24,
+                //     CircleAvatar(
+                //       radius: 5,
+                //       backgroundColor: AppColors.softYellowColor,
+                //     ),
+                //     AppSpacing.w24,
+                //     CircleAvatar(
+                //       radius: 5,
+                //       backgroundColor: AppColors.softPinkColor,
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),

@@ -23,18 +23,18 @@ class OrdersScreen extends StatelessWidget {
         surfaceTintColor: AppColors.powderPurpleColor,
         leading: Container(),
         leadingWidth: 0,
-        toolbarHeight: 40,
+        toolbarHeight: 20,
         backgroundColor: AppColors.powderPurpleColor,
         elevation: 0,
         title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: cText(
                   value: 'ORDER',
-                  fontSize: 20,
+                  fontSize: 16,
                   color: AppColors.blackColor,
                   fontWeight: FontWeight.w500,
                   overflow: TextOverflow.clip,
@@ -43,7 +43,7 @@ class OrdersScreen extends StatelessWidget {
               Flexible(
                 child: cText(
                   value: 'S H I V A M',
-                  fontSize: 20,
+                  fontSize: 16,
                   color: AppColors.blackColor,
 
                   overflow: TextOverflow.clip,

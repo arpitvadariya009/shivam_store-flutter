@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shivam_stores/core/utils/app_colors.dart';
 import 'package:shivam_stores/model/api_response_model.dart';
@@ -14,6 +15,10 @@ class ShopController extends GetxController {
       ApiResponse<SubCategoriesModel?>();
   @override
   void onInit() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
     title = Get.arguments['title'];
     id = Get.arguments['id'];
     fetchSubCategories();

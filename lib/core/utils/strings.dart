@@ -13,6 +13,7 @@ class Strings {
   static const String kIAgreewithTermPrivcy =
       "I Agree with Terms of Service and Privacy Policy";
   static const String kRegister = "Register";
+  static const String kNewUser = "New User";
   static const String kAlreadyhaveanaccount = "Already have an account? ";
   static const String kSignIn = "Sign In";
   static const String kSignUp = "Sign Up";
@@ -178,4 +179,14 @@ class Strings {
       'totalPiece': 24,
     },
   ];
+
+  static Color hexToColor(String code) {
+    code = code.replaceAll("#", "");
+
+    if (code.length == 6) {
+      code = "FF$code"; // add full opacity
+    }
+
+    return Color(int.parse(code, radix: 16));
+  }
 }

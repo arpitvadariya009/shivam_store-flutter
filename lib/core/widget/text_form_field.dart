@@ -15,6 +15,9 @@ Widget textFormField({
   List<TextInputFormatter>? inputFormatters,
   bool obscureText = false,
   Color? fillColor,
+  int? maxLines,
+  int? minLines,
+  Color? hintColor,
 }) {
   return TextFormField(
     controller: controller,
@@ -27,15 +30,21 @@ Widget textFormField({
       fontSize: 14,
       fontWeight: FontWeight.w500,
     ),
+    minLines: minLines,
+    maxLines: maxLines,
     obscureText: obscureText,
     keyboardType: keyboardType,
     cursorColor: AppColors.blackColor,
     decoration: InputDecoration(
       hintText: hintText,
-      hintStyle: TextStyle(color: AppColors.hintColor, fontSize: 12),
+      hintStyle: TextStyle(
+        color: hintColor ?? AppColors.hintColor,
+        fontSize: 12,
+      ),
       suffixIcon: suffixIcon,
       prefixIcon: prefixIcon,
       fillColor: fillColor ?? AppColors.textFieldBgColor,
+      // focusColor: fillColor ?? AppColors.textFieldBgColor,
       filled: true,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),

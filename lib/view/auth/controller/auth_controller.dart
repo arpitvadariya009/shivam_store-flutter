@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shivam_stores/core/routes/app_routes.dart';
@@ -101,6 +102,9 @@ class AuthController extends GetxController {
       if (userModel.error != null) {
         await showToast(message: userModel.error ?? "");
       } else if (userModel.data != null) {
+        print(
+          "------------->userModel.data?.message--->${userModel.data?.message}",
+        );
         await showToast(message: userModel.data?.message ?? "");
         if (userModel.data?.success == true) {
           await HiveService().setValue(
@@ -109,7 +113,7 @@ class AuthController extends GetxController {
           );
           await HiveService().setValue(
             HiveService.isStaff,
-            userModel.data?.data?.userType ?? 1,
+            userModel.data?.data?.userType ?? 0,
           );
 
           await HiveService().setValue(
@@ -118,8 +122,13 @@ class AuthController extends GetxController {
           );
 
           clean();
+
+          await HiveService().setValue(
+            HiveService.isverified,
+            userModel.data?.data?.isverified ?? false,
+          );
           if (userModel.data?.data?.isverified == true) {
-            Get.offNamed(AppRoutes.kHomeScreen);
+            Get.offAllNamed(AppRoutes.kHomeScreen);
           } else {
             Get.toNamed(AppRoutes.kVerificationScreen);
           }
@@ -146,6 +155,15 @@ class AuthController extends GetxController {
     isPasswordValid = false;
     isPivacyValid = false;
     super.onClose();
+  }
+
+  @override
+  void onInit() {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top],
+    );
+     super.onInit();
   }
 }
 

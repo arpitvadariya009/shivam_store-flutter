@@ -23,7 +23,7 @@ class VerificationScreen extends StatelessWidget {
       ),
       body: GestureDetector(
         onTap: () {
-          Get.toNamed(AppRoutes.kHomeScreen);
+          // Get.offAllNamed(AppRoutes.kHomeScreen);
         },
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 50),
