@@ -16,6 +16,6 @@ Widget netWorkImage({required String imageUrl, BoxFit? fit}) {
         ),
     errorWidget:
         (context, url, error) =>
-            Image.asset('assets/image/image_cart.png', fit: fit),
+            Image.asset('assets/image/logo_icon.png', fit: fit),
   );
 }

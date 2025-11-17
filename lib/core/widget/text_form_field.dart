@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:shivam_stores/core/utils/app_colors.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -36,6 +37,10 @@ Widget textFormField({
     keyboardType: keyboardType,
     cursorColor: AppColors.blackColor,
     decoration: InputDecoration(
+      constraints: BoxConstraints(
+        minHeight: Get.width * 0.05,
+        maxHeight: Get.width * 0.05,
+      ),
       hintText: hintText,
       hintStyle: TextStyle(
         color: hintColor ?? AppColors.hintColor,
@@ -93,8 +98,8 @@ pinTextField({
       fieldOuterPadding: EdgeInsets.only(right: 15),
       shape: PinCodeFieldShape.box,
       borderRadius: BorderRadius.circular(5),
-      fieldHeight: 50,
-      fieldWidth: 50,
+      fieldHeight: Get.width * 0.05,
+      fieldWidth: Get.width * 0.05,
       activeColor: AppColors.transparentColor,
       selectedColor: AppColors.transparentColor,
       inactiveColor: AppColors.transparentColor,

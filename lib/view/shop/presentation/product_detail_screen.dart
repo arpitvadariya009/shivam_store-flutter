@@ -116,7 +116,7 @@ class ProductDetailScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      flex: 7,
+                      // flex: 7,
                       child: GestureDetector(
                         onDoubleTapDown: (details) {
                           c.doubleTapDetails = details; // Save tap position
@@ -164,8 +164,8 @@ class ProductDetailScreen extends StatelessWidget {
                       ),
                     ),
 
-                    Expanded(
-                      flex: 2,
+                    SizedBox(
+                      width: 280,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Column(

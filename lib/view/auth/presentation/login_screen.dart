@@ -39,25 +39,44 @@ class LoginScreen extends StatelessWidget {
         builder: (c) {
           return Stack(
             children: [
+              /// Background Image
               Positioned(
-                bottom: 50,
-                child: Image.asset("assets/image/welcome.png"),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                bottom: Get.height * 0.1,
+                left: 0,
+                // right: 0,
+                child: Image.asset(
+                  "assets/image/welcome.png",
 
+                  height: Get.height * 0.28,
+
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
                 child: Form(
                   key: c.loginFormKey,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
+
                     children: [
+                      /// MOBILE + PIN + LOGIN (Row)
                       Row(
-                        spacing: 15,
                         crossAxisAlignment: CrossAxisAlignment.start,
+
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          /// Mobile
                           Expanded(
+                            flex: 4,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+
                               children: [
                                 titleText(value: Strings.kMobileNumber),
                                 textFormField(
@@ -68,11 +87,11 @@ class LoginScreen extends StatelessWidget {
                                   prefixIcon: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      AppSpacing.w10,
-                                      Text(
+                                      const SizedBox(width: 10),
+                                      const Text(
                                         '+91',
                                         style: TextStyle(
-                                          color: AppColors.blackColor,
+                                          color: Colors.black,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -87,7 +106,12 @@ class LoginScreen extends StatelessWidget {
                               ],
                             ),
                           ),
+
+                          SizedBox(width: 16),
+
+                          /// PIN
                           Expanded(
+                            flex: 3,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -102,23 +126,27 @@ class LoginScreen extends StatelessWidget {
                                         Strings.kPIN,
                                       ),
                                 ),
+                                const SizedBox(height: 4),
                                 cText(
                                   value: Strings.kResetPIN,
-                                  color: AppColors.whiteColor,
+                                  color: Colors.white,
                                   fontSize: 10,
                                 ),
                               ],
                             ),
                           ),
 
-                          Column(
-                            children: [
-                              titleText(value: ""),
+                          SizedBox(width: 16),
 
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: ButtonWidget(
-                                  width: width * 0.3,
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                titleText(value: ''),
+
+                                ButtonWidget(
+                                  height: 50,
                                   gradient: LinearGradient(
                                     colors: [
                                       AppColors.tealColor,
@@ -130,20 +158,21 @@ class LoginScreen extends StatelessWidget {
                                   },
                                   title: Strings.kLogin,
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
 
-                      AppSpacing.h16,
+                      const Spacer(),
 
+                      /// NEW USER BUTTON
                       Align(
                         alignment: Alignment.bottomRight,
                         child: ButtonWidget(
-                          width: width * 0.2,
+                          width: MediaQuery.of(context).size.width * 0.28,
                           bgColor: AppColors.darkPurpuleColor,
-                          onTap: () async {
+                          onTap: () {
                             Get.offNamed(AppRoutes.kRegisterScreen);
                           },
                           title: Strings.kNewUser,
