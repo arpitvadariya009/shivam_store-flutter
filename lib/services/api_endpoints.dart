@@ -1,8 +1,10 @@
 class ApiEndpoints {
   // static const String baseUrl = "http://192.168.29.63:6000/api/v1/";
   // static const String imageUrl = "http://192.168.29.63:6000/uploads/";
-  static const String baseUrl = "https://yummyburp.in/api/v1/";
-  static const String imageUrl = "https://yummyburp.in/uploads/";
+  static const String baseUrl = "https://shivamapi.yummyburp.in/api/v1/";
+  static const String imageUrl = "https://shivamapi.yummyburp.in/uploads/";
+  // static const String baseUrl = "https://yummyburp.in/api/v1/";
+  // static const String imageUrl = "https://yummyburp.in/uploads/";
   // static const String baseUrl = "http://194.238.17.199:6000/api/v1/";
   // static const String imageUrl = "http://194.238.17.199:6000/uploads/";
   static const String login = "login";

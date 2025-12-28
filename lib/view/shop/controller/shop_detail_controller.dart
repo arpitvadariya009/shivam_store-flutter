@@ -46,7 +46,12 @@ class ShopDetailController extends GetxController {
 
     final response = await _apiService.get<ProductsDetailModel?>(
       '${ApiEndpoints.getFavorite}${HiveService().getValue(HiveService.userId)}',
-      parser: (data) => ProductsDetailModel.fromJson(data),
+      parser: (data) {
+        if (data == null || data is! Map<String, dynamic>) {
+          return ProductsDetailModel(message: "", data: []);
+        }
+        return ProductsDetailModel.fromJson(data);
+      },
     );
 
     for (int i = 0; i < response.data!.data!.length; i++) {
@@ -55,6 +60,33 @@ class ShopDetailController extends GetxController {
     update(); // Update UI with data or error
 
     productsModel = response;
+    productsModel.data?.data?.sort((a, b) {
+      final regExp = RegExp(r'([a-zA-Z]+)\s*(\d+)');
+
+      final aCode = a.code ?? '';
+      final bCode = b.code ?? '';
+
+      final aMatch = regExp.firstMatch(aCode);
+      final bMatch = regExp.firstMatch(bCode);
+
+      // If format doesn't match, fallback
+      if (aMatch == null || bMatch == null) {
+        return aCode.toLowerCase().compareTo(bCode.toLowerCase());
+      }
+
+      // Alphabet part (CB)
+      final aPrefix = aMatch.group(1)!.toLowerCase();
+      final bPrefix = bMatch.group(1)!.toLowerCase();
+
+      final prefixCompare = aPrefix.compareTo(bPrefix);
+      if (prefixCompare != 0) return prefixCompare;
+
+      // Numeric part (1, 2, 10, 301...)
+      final aNumber = int.parse(aMatch.group(2)!);
+      final bNumber = int.parse(bMatch.group(2)!);
+
+      return aNumber.compareTo(bNumber);
+    });
     update(); // Update UI with data or error
   }
 
@@ -72,6 +104,33 @@ class ShopDetailController extends GetxController {
     );
 
     productsModel = response;
+    productsModel.data?.data?.sort((a, b) {
+      final regExp = RegExp(r'([a-zA-Z]+)\s*(\d+)');
+
+      final aCode = a.code ?? '';
+      final bCode = b.code ?? '';
+
+      final aMatch = regExp.firstMatch(aCode);
+      final bMatch = regExp.firstMatch(bCode);
+
+      // If format doesn't match, fallback
+      if (aMatch == null || bMatch == null) {
+        return aCode.toLowerCase().compareTo(bCode.toLowerCase());
+      }
+
+      // Alphabet part (CB)
+      final aPrefix = aMatch.group(1)!.toLowerCase();
+      final bPrefix = bMatch.group(1)!.toLowerCase();
+
+      final prefixCompare = aPrefix.compareTo(bPrefix);
+      if (prefixCompare != 0) return prefixCompare;
+
+      // Numeric part (1, 2, 10, 301...)
+      final aNumber = int.parse(aMatch.group(2)!);
+      final bNumber = int.parse(bMatch.group(2)!);
+
+      return aNumber.compareTo(bNumber);
+    });
     update(); // Update UI with data or error
   }
 }

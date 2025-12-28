@@ -8,35 +8,33 @@ class CartModel {
 
   CartModel({this.success, this.cart, this.message, this.note});
 
-  factory CartModel.fromJson(Map<String, dynamic> json) => CartModel(
-    success: json["success"],
-    message: json["message"],
-    note: json["note"],
-    cart:
-        json["cart"] == null
-            ? []
-            : json["cart"] is Map
-            ? [CartData.fromJson(json["cart"])]
-            : List<CartData>.from(
-              json["cart"].map((x) => CartData.fromJson(x)),
-            ),
-  );
+  factory CartModel.fromJson(Map<String, dynamic> json) {
+    final raw = json["cart"];
+
+    List<CartData> parsedList = [];
+
+    if (raw is Map<String, dynamic>) {
+      parsedList = [CartData.fromJson(raw)];
+    } else if (raw is List) {
+      parsedList =
+          raw
+              .where((e) => e != null) // 🟢 FIX: skip null items
+              .map((e) => CartData.fromJson(e as Map<String, dynamic>))
+              .toList();
+    }
+
+    return CartModel(
+      success: json["success"],
+      message: json["message"],
+      note: json["note"],
+      cart: parsedList,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "note": note,
     "success": success,
     "message": message,
-    "cart": List<dynamic>.from(cart!.map((x) => x.toJson())),
+    "cart": cart?.map((x) => x.toJson()).toList() ?? [],
   };
 }
-
-// class Cart {
-//   CartData? productId;
-
-//   Cart({this.productId});
-
-//   factory Cart.fromJson(Map<String, dynamic> json) =>
-//       Cart(productId: CartData.fromJson(json["productId"]));
-
-//   Map<String, dynamic> toJson() => {"productId": productId?.toJson()};
-// }

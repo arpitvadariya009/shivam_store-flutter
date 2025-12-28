@@ -19,15 +19,24 @@ Widget textFormField({
   int? maxLines,
   int? minLines,
   Color? hintColor,
+  Color? textColor,
+  bool readOnly = false,
+  bool? enabled,
+  EdgeInsetsGeometry? contentPadding,
+  void Function(String)? onFieldSubmitted,
 }) {
   return TextFormField(
     controller: controller,
     inputFormatters: inputFormatters,
     validator: validator,
     onTap: onTap,
+
+    enabled: enabled,
+
+    readOnly: readOnly,
     onChanged: onChanged,
     style: TextStyle(
-      color: AppColors.blackColor,
+      color: textColor ?? AppColors.blackColor,
       fontSize: 14,
       fontWeight: FontWeight.w500,
     ),
@@ -36,7 +45,10 @@ Widget textFormField({
     obscureText: obscureText,
     keyboardType: keyboardType,
     cursorColor: AppColors.blackColor,
+    onFieldSubmitted: onFieldSubmitted,
     decoration: InputDecoration(
+      contentPadding:
+          contentPadding ?? EdgeInsets.symmetric(horizontal: Get.width * 0.01),
       constraints: BoxConstraints(
         minHeight: Get.width * 0.05,
         maxHeight: Get.width * 0.05,

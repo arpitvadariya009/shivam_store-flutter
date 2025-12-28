@@ -15,9 +15,11 @@ import 'package:shivam_stores/view/manage_order/model/manage_order_model.dart';
 class ManageOrderController extends GetxController {
   final ApiService _apiService = ApiService.instance;
   ApiResponse<ManageOrderModel?> orderModel = ApiResponse<ManageOrderModel?>();
-  int? buttonIndex;
+  int buttonIndex = 0;
+  String? selcetdStatusID;
 
   String? value;
+  String? status;
   String? selectedCategoryName;
   String? statusID;
   List categoryName = jsonDecode(HiveService().getValue(HiveService.category));
@@ -43,7 +45,8 @@ class ManageOrderController extends GetxController {
     LoaderService.instance.show(context);
     dynamic temp;
     ApiResponse response = await _apiService.put<dynamic>(
-      ApiEndpoints.updateOrder,
+      ApiEndpoints.updateOrder +
+          '?userId=${HiveService().getValue(HiveService.userId)}',
       data: {"orderId": orderId, "status": status},
       parser: (data) => temp = data,
     );
@@ -74,11 +77,11 @@ class ManageOrderController extends GetxController {
       "-------HiveService().getValue(HiveService.userId)--->${HiveService().getValue(HiveService.userId).toString()}",
     );
     print(
-      "-------uri--->${ApiEndpoints.allGroupedOrders}?status=$status&category=${category ?? ''}&date=${date == null ? "" : DateFormat('yyyy-MM-dd').format(date)}",
+      "-------uri--->${ApiEndpoints.allGroupedOrders}?status=$status&category=${category ?? ''}&date=${date == null ? "" : DateFormat('dd-MM-yyyy').format(date)}",
     );
 
     final response = await _apiService.get<ManageOrderModel?>(
-      "${ApiEndpoints.allGroupedOrders}?status=$status&category=${category ?? ''}&date=${date == null ? "" : DateFormat('yyyy-MM-dd').format(date)}",
+      "${ApiEndpoints.allGroupedOrders}?userId=${HiveService().getValue(HiveService.userId)}&status=$status&category=${category ?? ''}&date=${date == null ? "" : DateFormat('dd-MM-yyyy').format(date)}",
       parser: (data) {
         print("------------------>data---->${data}");
 

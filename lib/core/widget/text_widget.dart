@@ -12,6 +12,8 @@ Widget cText({
   TextAlign? textAlign,
   double maxFontSize = double.infinity,
   double minFontSize = 8,
+  TextDecoration? decoration,
+  Color? decorationColor,
 }) {
   return AutoSizeText(
     value,
@@ -22,9 +24,12 @@ Widget cText({
     overflow: overflow,
 
     style: TextStyle(
+      decorationColor: decorationColor,
       fontSize: fontSize,
       color: color ?? AppColors.blackColor,
       fontWeight: fontWeight,
+      decoration: decoration,
+
       overflow: overflow,
     ),
   );

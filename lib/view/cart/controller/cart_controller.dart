@@ -16,7 +16,7 @@ class CartController extends GetxController {
   final ApiService _apiService = ApiService.instance;
   ApiResponse<CartModel?> cartModel = ApiResponse<CartModel?>();
   TextEditingController noteTXTController = TextEditingController();
-
+  bool tapNotes = false;
   String? apiName;
   String? status;
   String? orderId;
@@ -52,7 +52,7 @@ class CartController extends GetxController {
       apiName ??
           '${ApiEndpoints.getToCart}${HiveService().getValue(HiveService.userId)}',
       parser: (data) {
-        print("-------response--->${data}");
+        print("-------response cart--->${data}");
 
         return CartModel.fromJson(data);
       },
@@ -74,7 +74,8 @@ class CartController extends GetxController {
     print("-------noteTXTController.text--->${noteTXTController.text}");
     dynamic temp;
     ApiResponse response = await _apiService.post<dynamic>(
-      ApiEndpoints.placeOrder,
+      ApiEndpoints.placeOrder +
+          '?userId=${HiveService().getValue(HiveService.userId)}',
       data: {
         "userId": HiveService().getValue(HiveService.userId).toString(),
         'note': noteTXTController.text,

@@ -118,8 +118,7 @@ class ShopDetailScreen extends StatelessWidget {
                                     'index': index,
                                     'id': product?.id ?? "",
                                     'title':
-                                        "${Get.find<ShopDetailController>().title == "FAVORITE" ? Get.find<ShopDetailController>().title : "${Get.find<ShopController>().title.toUpperCase()} / ${Get.find<ShopDetailController>().title} "} / ${product?.code ?? ""}",
-
+                                        "${Get.find<ShopDetailController>().title == "FAVORITE" ? Get.find<ShopDetailController>().title : "${Get.find<ShopController>().title.toUpperCase()} / ${Get.find<ShopDetailController>().title} "}",
                                     'bgColor':
                                         Get.find<ShopDetailController>()
                                                     .title ==
@@ -136,11 +135,11 @@ class ShopDetailScreen extends StatelessWidget {
                                             : AppColors.whiteColor,
                                   },
                                 );
-                              },
+                              }, 
                               child: Container(
                                 width: double.infinity,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.32,
+                            height:     MediaQuery.of(context).size.height * 0.32,
+
                                 padding: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   color: AppColors.whiteColor.withOpacity(0.2),

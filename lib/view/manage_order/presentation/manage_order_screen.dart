@@ -21,7 +21,8 @@ class ManageOrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey _buttonKey = GlobalKey();
+    final GlobalKey _button1Key = GlobalKey();
+    final GlobalKey _button2Key = GlobalKey();
 
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -88,12 +89,17 @@ class ManageOrderScreen extends StatelessWidget {
                       ButtonWidget(
                         onTap: () {
                           c.buttonIndex = 0;
-                          c.fetchOrder(date: DateTime.now());
+                          c.value = null;
+                          c.status = null;
+                          c.fetchOrder(
+                            category: c.selectedCategoryName ?? '',
+                            status: c.selcetdStatusID ?? '',
+                          );
                           c.update();
                         },
-                        title: 'TODAY',
+                        title: 'All',
                         width: 80,
-                        height: 40,
+                        height: 30,
                         textcolor:
                             c.buttonIndex == 0
                                 ? AppColors.blackColor
@@ -105,64 +111,131 @@ class ManageOrderScreen extends StatelessWidget {
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
-
                       ButtonWidget(
                         onTap: () {
                           c.buttonIndex = 1;
                           c.fetchOrder(
+                            date: DateTime.now(),
+                            category: c.selectedCategoryName ?? '',
+                            status: c.selcetdStatusID ?? '',
+                          );
+                          c.update();
+                        },
+                        title: 'TODAY',
+                        width: 80,
+                        height: 30,
+                        textcolor:
+                            c.buttonIndex == 1
+                                ? AppColors.blackColor
+                                : AppColors.whiteColor,
+                        bgColor:
+                            c.buttonIndex == 1
+                                ? AppColors.buttonFFAE00Color
+                                : AppColors.whiteColor.withOpacity(0.4),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+
+                      ButtonWidget(
+                        onTap: () {
+                          c.buttonIndex = 2;
+                          c.fetchOrder(
                             date: DateTime.now().subtract(
                               const Duration(days: 1),
                             ),
+                            status: c.selcetdStatusID ?? '',
+                            category: c.selectedCategoryName ?? '',
                           );
 
                           c.update();
                         },
                         title: 'YESTERDAY',
                         width: 100,
-                        height: 40,
+                        height: 30,
                         textcolor:
-                            c.buttonIndex == 1
+                            c.buttonIndex == 2
                                 ? AppColors.blackColor
                                 : AppColors.whiteColor,
                         bgColor:
-                            c.buttonIndex == 1
+                            c.buttonIndex == 2
                                 ? AppColors.buttonFFAE00Color
                                 : AppColors.whiteColor.withOpacity(0.4),
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
-                      AppSpacing.w32,
 
-                      ButtonWidget(
-                        onTap: () {
-                          c.buttonIndex = 2;
-                          c.fetchOrder(status: '0');
-                          c.update();
-                        },
-                        title: 'PENDING',
-                        width: 100,
-                        height: 40,
-                        textcolor:
-                            c.buttonIndex == 2
-                                ? AppColors.blackColor
-                                : AppColors.whiteColor,
-                        bgColor:
-                            c.buttonIndex == 2
-                                ? AppColors.buttonFFAE00Color
-                                : AppColors.whiteColor.withOpacity(0.4),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      // ButtonWidget(
+                      //   onTap: () {
+                      //     c.buttonIndex = 3;
+                      //     c.fetchOrder(status: '0');
+                      //     c.update();
+                      //   },
+                      //   title: 'PENDING',
+                      //   width: 100,
+                      //   height: 40,
+                      //   textcolor:
+                      //       c.buttonIndex == 3
+                      //           ? AppColors.blackColor
+                      //           : AppColors.whiteColor,
+                      //   bgColor:
+                      //       c.buttonIndex == 3
+                      //           ? AppColors.buttonFFAE00Color
+                      //           : AppColors.whiteColor.withOpacity(0.4),
+                      //   fontSize: 12,
+                      //   fontWeight: FontWeight.w500,
+                      // ),
+                      // ButtonWidget(
+                      //   onTap: () {
+                      //     c.buttonIndex = 4;
+                      //     c.fetchOrder(status: '1');
+                      //     c.update();
+                      //   },
+                      //   title: 'IN PROCESS',
+                      //   width: 100,
+                      //   height: 40,
+                      //   textcolor:
+                      //       c.buttonIndex == 4
+                      //           ? AppColors.blackColor
+                      //           : AppColors.whiteColor,
+                      //   bgColor:
+                      //       c.buttonIndex == 4
+                      //           ? AppColors.buttonFFAE00Color
+                      //           : AppColors.whiteColor.withOpacity(0.4),
+                      //   fontSize: 12,
+                      //   fontWeight: FontWeight.w500,
+                      // ),
+                      // ButtonWidget(
+                      //   onTap: () {
+                      //     c.buttonIndex = 5;
+                      //     c.fetchOrder(status: '2');
+                      //     c.update();
+                      //   },
+                      //   title: 'DONE',
+                      //   width: 100,
+                      //   height: 40,
+                      //   textcolor:
+                      //       c.buttonIndex == 5
+                      //           ? AppColors.blackColor
+                      //           : AppColors.whiteColor,
+                      //   bgColor:
+                      //       c.buttonIndex == 5
+                      //           ? AppColors.buttonFFAE00Color
+                      //           : AppColors.whiteColor.withOpacity(0.4),
+                      //   fontSize: 12,
+                      //   fontWeight: FontWeight.w500,
+                      // ),
                       AppSpacing.w32,
 
                       Spacer(),
 
+                      AppSpacing.w32,
+
                       ButtonWidget(
-                        key: _buttonKey, // Assign the GlobalKey
+                        key: _button2Key, // Assign the GlobalKey
 
                         onTap: () async {
                           final RenderBox renderBox =
-                              _buttonKey.currentContext?.findRenderObject()
+                              _button2Key.currentContext?.findRenderObject()
                                   as RenderBox;
                           final Offset position = renderBox.localToGlobal(
                             Offset.zero,
@@ -179,25 +252,37 @@ class ManageOrderScreen extends StatelessWidget {
                                 size.height +
                                 100, // Bottom edge (arbitrary value to define height constraint)
                           );
-                          final result = await showMenu(
+
+                          await showMenu(
                             context: context,
                             position: buttonRect,
                             color: Colors.white,
                             items: [
-                              for (int i = 0; i < c.categoryName.length; i++)
+                              for (int i = 0; i < Strings.statuss.length; i++)
                                 PopupMenuItem(
                                   value: i,
 
                                   onTap: () {
-                                    c.value = c.categoryName[i];
-                                    c.buttonIndex = 3 + i;
-                                    c.selectedCategoryName = c.categoryName[i];
+                                    c.status = Strings.statuss[i]['status'];
+                                    c.selcetdStatusID =
+                                        Strings.statuss[i]['id'] ?? '';
+                                    c.fetchOrder(
+                                      status: Strings.statuss[i]['id'] ?? '',
+                                      category: c.selectedCategoryName ?? '',
 
-                                    c.fetchOrder(category: c.categoryName[i]);
+                                      date:
+                                          c.buttonIndex == 1
+                                              ? DateTime.now()
+                                              : c.buttonIndex == 2
+                                              ? DateTime.now().subtract(
+                                                const Duration(days: 1),
+                                              )
+                                              : null,
+                                    );
                                     c.update();
                                   },
                                   child: Text(
-                                    c.categoryName[i],
+                                    Strings.statuss[i]['status'],
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -207,9 +292,9 @@ class ManageOrderScreen extends StatelessWidget {
                             ],
                           );
                         },
-                        title: c.value ?? "Select",
+                        title: c.status ?? "Status",
                         width: 100,
-                        height: 40,
+                        height: 30,
                         textcolor:
                             // c.buttonIndex == 3
                             //     ? AppColors.blackColor
@@ -223,6 +308,116 @@ class ManageOrderScreen extends StatelessWidget {
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
+
+                      ButtonWidget(
+                        key: _button1Key, // Assign the GlobalKey
+
+                        onTap: () async {
+                          final RenderBox renderBox =
+                              _button1Key.currentContext?.findRenderObject()
+                                  as RenderBox;
+                          final Offset position = renderBox.localToGlobal(
+                            Offset.zero,
+                          );
+                          final Size size = renderBox.size;
+
+                          // Calculate the RelativeRect based on the button's position and size
+                          final RelativeRect buttonRect = RelativeRect.fromLTRB(
+                            position.dx,
+                            position.dy +
+                                size.height, // Position the top of the menu just below the button
+                            position.dx + size.width,
+                            position.dy +
+                                size.height +
+                                100, // Bottom edge (arbitrary value to define height constraint)
+                          );
+
+                          await showMenu(
+                            context: context,
+                            position: buttonRect,
+                            color: Colors.white,
+                            items: [
+                              PopupMenuItem(
+                                value: 'All',
+
+                                onTap: () {
+                                  c.value = 'All';
+
+                                  c.selectedCategoryName = null;
+
+                                  c.fetchOrder(
+                                    category: '',
+                                    status: c.selcetdStatusID ?? '',
+                                    date:
+                                        c.buttonIndex == 1
+                                            ? DateTime.now()
+                                            : c.buttonIndex == 2
+                                            ? DateTime.now().subtract(
+                                              const Duration(days: 1),
+                                            )
+                                            : null,
+                                  );
+                                  c.update();
+                                },
+                                child: Text(
+                                  'All',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                              for (int i = 0; i < c.categoryName.length; i++)
+                                PopupMenuItem(
+                                  value: i,
+
+                                  onTap: () {
+                                    c.value = c.categoryName[i];
+
+                                    c.selectedCategoryName = c.categoryName[i];
+
+                                    c.fetchOrder(
+                                      category: c.categoryName[i],
+                                      status: c.selcetdStatusID ?? '',
+                                      date:
+                                          c.buttonIndex == 1
+                                              ? DateTime.now()
+                                              : c.buttonIndex == 2
+                                              ? DateTime.now().subtract(
+                                                const Duration(days: 1),
+                                              )
+                                              : null,
+                                    );
+                                    c.update();
+                                  },
+                                  child: Text(
+                                    c.categoryName[i],
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
+                        title: c.value ?? "Category",
+                        width: 100,
+                        height: 30,
+                        textcolor:
+                            // c.buttonIndex == 3
+                            //     ? AppColors.blackColor
+                            //     :
+                            AppColors.whiteColor,
+                        bgColor:
+                        // c.buttonIndex == 3
+                        //     ? AppColors.buttonFFAE00Color
+                        //     :
+                        AppColors.whiteColor.withOpacity(0.4),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      AppSpacing.w32,
                     ],
                   ),
                 ),
@@ -253,20 +448,32 @@ class ManageOrderScreen extends StatelessWidget {
                                     arguments: {
                                       'orderId': orders?.orderId,
                                       'api_name':
-                                          "${ApiEndpoints.getToOrder}${orders?.orderId ?? ''}",
+                                          "${ApiEndpoints.getToOrder}${orders?.orderId ?? ''}&userId=${HiveService().getValue(HiveService.userId)}",
                                       'status': orders?.status ?? "",
                                       'name': orders?.firmName,
                                       'note': orders?.note,
                                     },
                                   );
 
-                                  c.fetchOrder();
+                                  c.fetchOrder(
+                                    category: c.selectedCategoryName ?? '',
+                                    status: c.selcetdStatusID ?? '',
+                                    date:
+                                        c.buttonIndex == 1
+                                            ? DateTime.now()
+                                            : c.buttonIndex == 2
+                                            ? DateTime.now().subtract(
+                                              const Duration(days: 1),
+                                            )
+                                            : null,
+                                  );
                                   c.update();
                                 },
                                 child: Container(
                                   width: double.infinity,
-                                  height: 42,
-                                  margin: EdgeInsets.only(bottom: 10),
+                                  height: 35,
+                                  margin: EdgeInsets.only(bottom: 5),
+                                  padding: EdgeInsets.only(left: 15),
                                   decoration: BoxDecoration(
                                     color:
                                         orders?.colorCode == null
@@ -287,13 +494,13 @@ class ManageOrderScreen extends StatelessWidget {
                                         CrossAxisAlignment.center,
                                     children: [
                                       cText(
-                                        value:
-                                            orders?.date == null
-                                                ? ""
-                                                : DateFormat(
-                                                  'dd-MM-yyyy',
-                                                ).format(orders!.date!),
-                                        fontSize: 14,
+                                        value: orders?.date ?? '',
+                                        // orders?.date == null
+                                        //     ? ""
+                                        //     : DateFormat(
+                                        //       'dd-MM-yyyy',
+                                        //     ).format(orders!.date!),
+                                        fontSize: 20,
                                         fontWeight: FontWeight.w600,
                                       ),
 
@@ -337,6 +544,7 @@ class ManageOrderScreen extends StatelessWidget {
                                         children: [
                                           ButtonWidget(
                                             // height: 36,
+                                            alignment: Alignment.centerRight,
                                             onTap: () {
                                               showDialog(
                                                 context: context,
@@ -443,22 +651,16 @@ class ManageOrderScreen extends StatelessWidget {
                                                                     context:
                                                                         context,
                                                                     category:
-                                                                        c.buttonIndex ==
-                                                                                3
-                                                                            ? c.selectedCategoryName
-                                                                            : null,
+                                                                        c.selectedCategoryName,
                                                                     statusFilter:
-                                                                        c.buttonIndex ==
-                                                                                2
-                                                                            ? '0'
-                                                                            : '',
+                                                                        c.status,
 
                                                                     date:
                                                                         c.buttonIndex ==
-                                                                                0
+                                                                                1
                                                                             ? DateTime.now()
                                                                             : c.buttonIndex ==
-                                                                                1
+                                                                                2
                                                                             ? DateTime.now().subtract(
                                                                               const Duration(
                                                                                 days:

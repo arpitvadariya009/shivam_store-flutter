@@ -71,15 +71,35 @@ class Strings {
     {'status': kInProcess, 'id': '1'},
     {'status': kDone, 'id': '2'},
   ];
+  static const List<Map> statuss = [
+    {'status': 'All', 'id': null},
+    {'status': kPending, 'id': '0'},
+    {'status': kInProcess, 'id': '1'},
+    {'status': kDone, 'id': '2'},
+  ];
 
   // static List labels = [kFavorite, kCart, kOrders, kProfile];
   static List labels = [
     {
       'name': kProfile,
+      'icon': 'assets/image/profile.svg',
       'color': LinearGradient(
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
         colors: [AppColors.navyBlueColor, AppColors.darkBlueColor],
+      ).withOpacity(0.9),
+    },
+    {
+      'name': kFavorite,
+      'icon': 'assets/image/star_fill.svg',
+      'text_color': AppColors.textFAFFBFColor,
+      'color': LinearGradient(
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: [
+          AppColors.buttonFFFC4EColor.withOpacity(0.7),
+          AppColors.darkBlueColor,
+        ],
       ).withOpacity(0.9),
     },
     {
@@ -94,31 +114,8 @@ class Strings {
         ],
       ).withOpacity(0.9),
     },
-    {
-      'name': kFavorite,
-      'text_color': AppColors.textFAFFBFColor,
-      'color': LinearGradient(
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight,
-        colors: [
-          AppColors.buttonFFFC4EColor.withOpacity(0.7),
-          AppColors.darkBlueColor,
-        ],
-      ).withOpacity(0.9),
-    },
-    {
-      'name': kCart,
-      'text_color': AppColors.textA0DAFEColor,
-      'color': LinearGradient(
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight,
-        colors: [
-          AppColors.button5EFAF5Color.withOpacity(0.7),
-          AppColors.darkBlueColor,
-        ],
-      ).withOpacity(0.9),
-    },
   ];
+
   static List<String> titledashboard = [
     kWelcometoShivamStores,
     HiveService().getValue(HiveService.isStaff) == true

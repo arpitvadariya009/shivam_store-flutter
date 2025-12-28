@@ -164,25 +164,25 @@ class ProfileScreen extends StatelessWidget {
                     border: Border.all(color: AppColors.blackColor),
                   ),
                 ),
-                if (HiveService().getValue(HiveService.isStaff) != 1) ...[
-                  AppSpacing.w10,
-                  Expanded(
-                    child: ButtonWidget(
-                      onTap: () {
-                        // Get.find<HomeController>().controller.play();
+                // if (HiveService().getValue(HiveService.isStaff) != 1) ...[
+                //   AppSpacing.w10,
+                //   Expanded(
+                //     child: ButtonWidget(
+                //       onTap: () {
+                //         // Get.find<HomeController>().controller.play();
 
-                        // Get.find<DashboardController>().currentPage = 0;
-                        // Get.find<DashboardController>().update();
+                //         // Get.find<DashboardController>().currentPage = 0;
+                //         // Get.find<DashboardController>().update();
 
-                        // Get.offNamed(AppRoutes.kDashboardScreen);
-                      },
-                      title: Strings.kProducts,
-                      textcolor: AppColors.blackColor,
-                      bgColor: AppColors.whiteColor,
-                      border: Border.all(color: AppColors.blackColor),
-                    ),
-                  ),
-                ],
+                //         // Get.offNamed(AppRoutes.kDashboardScreen);
+                //       },
+                //       title: Strings.kProducts,
+                //       textcolor: AppColors.blackColor,
+                //       bgColor: AppColors.whiteColor,
+                //       border: Border.all(color: AppColors.blackColor),
+                //     ),
+                //   ),
+                // ],
               ],
             ),
           ],

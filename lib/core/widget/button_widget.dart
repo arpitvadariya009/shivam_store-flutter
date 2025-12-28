@@ -16,10 +16,17 @@ class ButtonWidget extends StatelessWidget {
   final FontWeight? fontWeight;
   final BoxBorder? border;
   final Widget? leadingWidget;
+  final Widget? tralingWidget;
   final Gradient? gradient;
   final DecorationImage? image;
-
+  final MainAxisAlignment? mainAxisAlignment;
   final void Function(TapDownDetails)? onTapDown;
+
+  final AlignmentGeometry? alignment;
+  final int? maxLines;
+
+  final TextAlign? textAlign;
+
   const ButtonWidget({
     Key? key,
     this.onTap,
@@ -33,9 +40,14 @@ class ButtonWidget extends StatelessWidget {
     this.fontWeight,
     this.border,
     this.leadingWidget,
+    this.tralingWidget,
     this.gradient,
     this.image,
+    this.mainAxisAlignment,
     this.onTapDown,
+    this.alignment,
+    this.maxLines,
+    this.textAlign,
   }) : super(key: key);
 
   @override
@@ -47,7 +59,7 @@ class ButtonWidget extends StatelessWidget {
         height: height ?? 50,
         width: width,
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        alignment: Alignment.center,
+        alignment: alignment ?? Alignment.center,
         decoration: BoxDecoration(
           image: image,
           border: border,
@@ -57,9 +69,10 @@ class ButtonWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius ?? 10),
         ),
         child:
-            leadingWidget != null
+            leadingWidget != null || tralingWidget != null
                 ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment:
+                      mainAxisAlignment ?? MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     leadingWidget ?? Container(),
@@ -67,18 +80,24 @@ class ButtonWidget extends StatelessWidget {
                     Flexible(
                       child: cText(
                         value: title,
-                        textAlign: TextAlign.center,
+                        maxLines: maxLines,
+
+                        textAlign: textAlign ?? TextAlign.center,
                         fontSize: fontSize ?? 16,
                         color: textcolor ?? AppColors.whiteColor,
                         fontWeight: fontWeight ?? FontWeight.w600,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
+
+                    tralingWidget ?? Container(),
                   ],
                 )
                 : cText(
                   value: title,
-                  textAlign: TextAlign.center,
+                  maxLines: maxLines,
+
+                  textAlign: textAlign ?? TextAlign.center,
                   fontSize: fontSize ?? 16,
                   color: textcolor ?? AppColors.whiteColor,
                   fontWeight: fontWeight ?? FontWeight.w600,

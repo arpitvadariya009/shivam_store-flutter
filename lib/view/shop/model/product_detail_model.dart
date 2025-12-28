@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class ProductsDetailModel {
   String? message;
   List<CartData>? data;
@@ -5,17 +7,35 @@ class ProductsDetailModel {
   ProductsDetailModel({this.message, this.data});
 
   factory ProductsDetailModel.fromJson(Map<String, dynamic> json) {
-    return ProductsDetailModel(
-      message: json["message"],
-      data:
-          json["data"] == null
-              ? []
-              : json["data"] is Map
-              ? [CartData.fromJson(json["data"])]
-              : List<CartData>.from(
-                json["data"].map((x) => CartData.fromJson(x)),
-              ),
-    );
+    final rawData = json["data"];
+
+    // If data is null → return empty list
+    if (rawData == null) {
+      return ProductsDetailModel(message: json["message"], data: []);
+    }
+
+    // If data is a map → convert to single item list
+    if (rawData is Map<String, dynamic>) {
+      return ProductsDetailModel(
+        message: json["message"],
+        data: [CartData.fromJson(rawData)],
+      );
+    }
+
+    // If data is a list → remove nulls and parse
+    if (rawData is List) {
+      return ProductsDetailModel(
+        message: json["message"],
+        data:
+            rawData
+                .where((e) => e != null) // remove null items
+                .map((e) => CartData.fromJson(e as Map<String, dynamic>))
+                .toList(),
+      );
+    }
+
+    // Fallback
+    return ProductsDetailModel(message: json["message"], data: []);
   }
 
   Map<String, dynamic> toJson() => {
@@ -35,7 +55,6 @@ class CartData {
   String? mediaType;
   int? type;
   String? categoryId;
-
   List<Variant>? variants;
 
   CartData({
@@ -58,7 +77,7 @@ class CartData {
     subCategoryId: json["subCategoryId"],
     image: json["image"],
     setSize: json["setSize"],
-    isFavorite: json["isFavorite"],
+    isFavorite: json["isFavorite"] ?? false,
     categoryId: json["categoryId"],
     media: json["media"],
     mediaType: json["mediaType"],
@@ -82,7 +101,10 @@ class CartData {
     "categoryId": categoryId,
     "media": media,
     "mediaType": mediaType,
-    "variants": List<dynamic>.from(variants!.map((x) => x.toJson())),
+    "variants":
+        variants == null
+            ? []
+            : List<dynamic>.from(variants!.map((x) => x.toJson())),
   };
 }
 
@@ -119,7 +141,6 @@ class Variant {
     "available": available,
     "_id": id,
     "setSize": setSize,
-
     "quantity": qty,
     "manageOrderStatus": manageOrderStatus,
   };

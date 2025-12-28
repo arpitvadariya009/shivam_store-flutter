@@ -1,16 +1,20 @@
-// import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shivam_stores/back_ground_service.dart';
 import 'package:shivam_stores/core/routes/app_routes.dart';
 import 'package:shivam_stores/core/utils/app_colors.dart';
-import 'package:shivam_stores/services/api_endpoints.dart';
 import 'package:shivam_stores/services/api_services.dart';
 import 'package:shivam_stores/services/hive_service.dart';
+import 'package:no_screenshot/no_screenshot.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (!kDebugMode) {
+    await NoScreenshot.instance.screenshotOff();
+  }
 
   await BackgroundLocation.ensurePermissionsReady(requestIfNeeded: false);
   await BackgroundLocation.getLocationInBackground();
@@ -29,6 +33,11 @@ void main() async {
   Get.put<ApiService>(ApiService(), permanent: true);
 
   runApp(const MyApp());
+  // runApp(
+  //   DevicePreview(
+  //     builder: (context) => MyApp(), // Wrap your app
+  //   ),
+  // );
 }
 
 class MyApp extends StatelessWidget {
@@ -36,11 +45,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      defaultTransition: Transition.fade,
+      transitionDuration: Duration(milliseconds: 200),
       theme: ThemeData(fontFamily: "Poppins"),
       initialRoute: AppRoutes.kSplashScreen,
       getPages: AppPages.pages,
       debugShowCheckedModeBanner: false,
-
       builder: (context, child) {
         return Container(
           decoration: const BoxDecoration(

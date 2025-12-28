@@ -17,6 +17,7 @@ import 'package:shivam_stores/view/home/controller/home_controller.dart';
 import 'package:shivam_stores/view/shop/controller/product_detail_controller.dart';
 import 'package:shivam_stores/view/shop/model/product_detail_model.dart';
 import 'package:shivam_stores/view/shop/presentation/shop_detail_screen.dart';
+import 'package:zoomable_interactive_viewer/zoomable_interactive_viewer.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   const ProductDetailScreen({super.key});
@@ -109,65 +110,47 @@ class ProductDetailScreen extends StatelessWidget {
               itemCount: c.categoriesModel?.data?.length,
 
               itemBuilder: (context, index) {
-                final product = c.categoriesModel?.data?[index];
+                final  product = c.categoriesModel?.data?[index];
                 final isVideo = product?.mediaType == "video";
                 return Row(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      // flex: 7,
-                      child: GestureDetector(
-                        onDoubleTapDown: (details) {
-                          c.doubleTapDetails = details; // Save tap position
-                        },
-                        onDoubleTap: () {
-                          final controller = c.transformationController;
-                          final position = c.doubleTapDetails?.localPosition;
-                          const double zoomScale = 2.0;
-                          if (controller.value != Matrix4.identity()) {
-                            controller.value = Matrix4.identity();
-                          } else {
-                            final x = -position!.dx * (zoomScale - 1);
-                            final y = -position.dy * (zoomScale - 1);
-                            controller.value =
-                                Matrix4.identity()
-                                  ..translate(x, y)
-                                  ..scale(zoomScale);
-                          }
-                        },
-                        child: InteractiveViewer(
-                          minScale: 0.5,
-
-                          panEnabled: true, // Allow drag when zoomed
-                          scaleEnabled: true, // Allow pinch zoom
-                          maxScale: 4.0,
-
-                          clipBehavior: Clip.none,
-                          transformationController: c.transformationController,
-
-                          child: SizedBox(
-                            height: double.infinity,
-                            child:
-                                isVideo
-                                    ? VideoPlayerWidget(
-                                      url: product?.media ?? "",
-                                      isPlayPuase: true,
-                                      autoPlay: true,
-                                    )
-                                    : netWorkImage(
-                                      imageUrl: product?.media ?? "",
-                                      fit: BoxFit.contain,
-                                    ),
-                          ),
+                      flex: 11,
+                      child:
+                      //  ZoomableInteractiveViewer(
+                      //   // minScale: 0.5,
+                      //   // panEnabled: true, // Allow drag when zoomed
+                      //   // scaleEnabled: true, // Allow pinch zoom
+                      //   // maxScale: 4.0,
+                      //   // clipBehavior: Clip.none,
+                      //   // transformationController: c.transformationController,
+                      //   child:
+                      SizedBox(
+                        height: double.infinity,
+                        child: Center(
+                          child:
+                              isVideo
+                                  ? VideoPlayerWidget(
+                                    url: product?.media ?? "",
+                                    isPlayPuase: true,
+                                    autoPlay: true,
+                                  )
+                                  : netWorkImage(
+                                    imageUrl: product?.media ?? "",
+                                    fit: BoxFit.contain,
+                                  ),
                         ),
                       ),
+                      // ),
                     ),
 
-                    SizedBox(
-                      width: 280,
+                    Flexible(
+                      flex: 3,
+                      // width: 280,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.only(left: 0, right: 35),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -176,15 +159,21 @@ class ProductDetailScreen extends StatelessWidget {
                             Expanded(
                               child: ListView(
                                 shrinkWrap: true,
-
                                 children: [
+                                  cText(
+                                    value: product?.code ?? "",
+                                    color: AppColors.whiteColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 22,
+                                    textAlign: TextAlign.center,
+                                  ),
                                   for (
                                     int i = 0;
                                     i < (product?.variants ?? []).length;
                                     i++
                                   ) ...[
                                     Container(
-                                      padding: EdgeInsets.only(left: 20),
+                                      padding: EdgeInsets.only(left: 5),
                                       decoration: BoxDecoration(
                                         border: Border.all(
                                           color: AppColors.darkGreyColor,
@@ -214,7 +203,7 @@ class ProductDetailScreen extends StatelessWidget {
                                                     onTap: () {},
                                                     child: Container(
                                                       height: 40,
-                                                      width: 40,
+                                                      // width: 40,
                                                       color: Colors.transparent,
                                                       alignment:
                                                           Alignment.center,
@@ -226,7 +215,7 @@ class ProductDetailScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                   ),
-                                                  Flexible(
+                                                  Expanded(
                                                     child: cText(
                                                       value:
                                                           (product!
@@ -238,9 +227,9 @@ class ProductDetailScreen extends StatelessWidget {
                                                           AppColors.whiteColor,
                                                       fontWeight:
                                                           FontWeight.w500,
-                                                      fontSize: 20,
+                                                      fontSize: 16,
                                                       textAlign:
-                                                          TextAlign.center,
+                                                          TextAlign.start,
 
                                                       overflow:
                                                           TextOverflow.ellipsis,
@@ -274,12 +263,12 @@ class ProductDetailScreen extends StatelessWidget {
                                                     },
                                                     child: Container(
                                                       height: 40,
-                                                      width: 40,
+                                                      width: 20,
                                                       color:
-                                                          product
-                                                                      ?.variants?[i]
+                                                          !(product
+                                                                      .variants?[i]
                                                                       .available ??
-                                                                  false
+                                                                  false)
                                                               ? AppColors
                                                                   .outoffStockColor
                                                               : AppColors
@@ -297,75 +286,94 @@ class ProductDetailScreen extends StatelessWidget {
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
-
                                                 children: [
-                                                  cText(
-                                                    value:
-                                                        product
-                                                            ?.variants?[i]
-                                                            .name ??
-                                                        "",
-                                                    color: AppColors.whiteColor,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 20,
-                                                  ),
-
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      log(
-                                                        "------->minus ----->${product?.variants?[i].available}",
-                                                      );
-                                                      if (product
-                                                              ?.variants?[i]
-                                                              .available ==
-                                                          true) {
-                                                        if ((product!
-                                                                    .variants![i]
-                                                                    .qty ??
-                                                                0) >
-                                                            0) {
-                                                          product
-                                                              .variants![i]
-                                                              .qty = (product
-                                                                      .variants![i]
-                                                                      .qty ??
-                                                                  0) -
-                                                              (product
-                                                                      .variants?[i]
-                                                                      .setSize ??
-                                                                  0);
-                                                          c.addToCart(
-                                                            varinat:
-                                                                product
-                                                                    .variants?[i],
-                                                            productCode:
-                                                                product.code ??
-                                                                "",
-                                                            productId:
-                                                                product.id ??
-                                                                "",
-                                                            increment:
-                                                                -(product
-                                                                        .variants?[i]
-                                                                        .setSize ??
-                                                                    0),
-                                                          );
-                                                          c.update();
-                                                        }
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      color: Colors.transparent,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Icon(
-                                                        Icons.remove,
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    spacing: 10,
+                                                    children: [
+                                                      cText(
+                                                        value:
+                                                            product
+                                                                ?.variants?[i]
+                                                                .name ??
+                                                            "",
                                                         color:
-                                                            AppColors.redColor,
+                                                            AppColors
+                                                                .whiteColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 16,
                                                       ),
-                                                    ),
+
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          log(
+                                                            "------->minus ----->${product?.variants?[i].available}",
+                                                          );
+                                                          if (product
+                                                                  ?.variants?[i]
+                                                                  .available ==
+                                                              true) {
+                                                            if ((product!
+                                                                        .variants![i]
+                                                                        .qty ??
+                                                                    0) >
+                                                                0) {
+                                                              product
+                                                                  .variants![i]
+                                                                  .qty = (product
+                                                                          .variants![i]
+                                                                          .qty ??
+                                                                      0) -
+                                                                  (product
+                                                                          .variants?[i]
+                                                                          .setSize ??
+                                                                      0);
+                                                              c.addToCart(
+                                                                varinat:
+                                                                    product
+                                                                        .variants?[i],
+                                                                productCode:
+                                                                    product
+                                                                        .code ??
+                                                                    "",
+                                                                productId:
+                                                                    product
+                                                                        .id ??
+                                                                    "",
+                                                                increment:
+                                                                    -(product
+                                                                            .variants?[i]
+                                                                            .setSize ??
+                                                                        0),
+
+                                                                categoryId:
+                                                                    product
+                                                                        ?.categoryId ??
+                                                                    '',
+                                                              );
+                                                              c.update();
+                                                            }
+                                                          }
+                                                        },
+                                                        child: Container(
+                                                          height: 40,
+                                                          // width: 40,
+                                                          color:
+                                                              Colors
+                                                                  .transparent,
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Icon(
+                                                            Icons.remove,
+                                                            color:
+                                                                AppColors
+                                                                    .redColor,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
 
                                                   Flexible(
@@ -383,20 +391,22 @@ class ProductDetailScreen extends StatelessWidget {
                                                                       ?.variants?[i]
                                                                       .available ==
                                                                   true
-                                                              ? (product!
-                                                                          .variants![i]
-                                                                          .qty ??
-                                                                      0)
-                                                                  .toString()
+                                                              ? product
+                                                                          ?.variants![i]
+                                                                          .setSize ==
+                                                                      0
+                                                                  ? 'N'
+                                                                  : (product?.variants![i].qty ??
+                                                                          0)
+                                                                      .toString()
                                                               : 'N/A',
                                                       color:
                                                           AppColors.whiteColor,
                                                       fontWeight:
                                                           FontWeight.w500,
-                                                      fontSize: 20,
+                                                      fontSize: 16,
                                                       textAlign:
                                                           TextAlign.center,
-
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                     ),
@@ -435,6 +445,10 @@ class ProductDetailScreen extends StatelessWidget {
                                                               0,
                                                           productId:
                                                               product?.id ?? "",
+                                                          categoryId:
+                                                              product
+                                                                  ?.categoryId ??
+                                                              '',
                                                         );
                                                         c.update();
                                                       }
@@ -486,33 +500,39 @@ class ProductDetailScreen extends StatelessWidget {
                                   isFavorite: product?.isFavorite ?? false,
                                 );
                               },
+                              maxLines: 2,
                               title:
-                                  product?.type == 0
-                                      ? "NEW"
-                                      : product?.type == 1
+                                  product?.type == 1
                                       ? "TRENDING"
-                                      : product?.type == 2
-                                      ? "EVER GREEN"
                                       : product?.type == 3
-                                      ? "Extra 5% Discount"
-                                      : product?.type == 4
-                                      ? "PREMIUM"
+                                      ? "EVER\nGREEN"
                                       : product?.type == 5
-                                      ? "Add To Wish List"
+                                      ? "Extra 5% Discount"
+                                      : product?.type == 2
+                                      ? "PREMIUM"
+                                      : product?.type == 4
+                                      ? "Add To\nWish List"
                                       : product?.type == 6
-                                      ? "Limited Stock"
+                                      ? "Limited\nStock"
                                       : "",
+                              mainAxisAlignment: MainAxisAlignment.start,
                               leadingWidget: SvgPicture.asset(
                                 product?.isFavorite == true
                                     ? "assets/image/star_fill.svg"
                                     : "assets/image/star.svg",
+
+                                height: 25,
+                                width: 25,
                               ),
+
+                              textAlign: TextAlign.start,
                               textcolor: AppColors.whiteColor,
                               fontWeight: FontWeight.w900,
                               borderRadius: 0,
-                              fontSize: 20,
+                              fontSize: 18,
+
                               image:
-                                  product?.type == 4
+                                  product?.type == 2
                                       ? DecorationImage(
                                         fit: BoxFit.cover,
                                         image: AssetImage(
@@ -560,27 +580,27 @@ class ProductDetailScreen extends StatelessWidget {
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
                                       )
-                                      : product?.type == 2
-                                      ? LinearGradient(
-                                        colors: [
-                                          AppColors.blackColor,
-                                          AppColors.blackColor,
-                                          AppColors.button009E15Color,
-                                        ],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                      )
                                       : product?.type == 3
                                       ? LinearGradient(
                                         colors: [
+                                          AppColors.button009E15Color,
                                           AppColors.blackColor,
                                           AppColors.blackColor,
-                                          AppColors.button2C1EEFColor,
                                         ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
                                       )
                                       : product?.type == 5
+                                      ? LinearGradient(
+                                        colors: [
+                                          AppColors.button2C1EEFColor,
+                                          AppColors.blackColor,
+                                          AppColors.blackColor,
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      )
+                                      : product?.type == 4
                                       ? LinearGradient(
                                         colors: [
                                           AppColors.navyBlueColor,

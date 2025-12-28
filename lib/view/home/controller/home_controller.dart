@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:shivam_stores/back_ground_service.dart';
+import 'package:shivam_stores/core/utils/strings.dart';
 import 'package:shivam_stores/model/api_response_model.dart';
 import 'package:shivam_stores/services/api_endpoints.dart';
 import 'package:shivam_stores/services/api_services.dart';
@@ -13,6 +15,8 @@ import 'package:shivam_stores/services/hive_service.dart';
 import 'package:shivam_stores/view/auth/model/user_model.dart';
 import 'package:shivam_stores/view/home/model/categories_model.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../../core/utils/app_colors.dart';
 
 class HomeController extends GetxController {
   VideoPlayerController? controller;
@@ -23,9 +27,52 @@ class HomeController extends GetxController {
 
   String? videoUrl;
   Timer? _timer;
+  List label2s = [];
 
   @override
   void onInit() async {
+    if (HiveService().getValue(HiveService.isStaff) == 1) {
+      label2s = [
+        {
+          'name': Strings.kManageOrders,
+          'text_color': AppColors.brownFFB7B8Color,
+          'color': LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [AppColors.brown6D0101Color, AppColors.darkBlueColor],
+          ).withOpacity(0.9),
+        },
+        {
+          'name': Strings.kCart,
+          'text_color': AppColors.textA0DAFEColor,
+          'color': LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              AppColors.button5EFAF5Color.withOpacity(0.7),
+              AppColors.darkBlueColor,
+            ],
+          ).withOpacity(0.9),
+        },
+      ];
+    } else {
+      label2s = [
+        {
+          'name': Strings.kCart,
+          'text_color': AppColors.textA0DAFEColor,
+          'color': LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              AppColors.button5EFAF5Color.withOpacity(0.7),
+              AppColors.darkBlueColor,
+            ],
+          ).withOpacity(0.9),
+        },
+      ];
+    }
+
+    update();
     await initLocation(); // 👈 FIX
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
@@ -35,11 +82,12 @@ class HomeController extends GetxController {
 
     try {
       await _apiService.get<dynamic>(
-        ApiEndpoints.teaserVideo,
+        ApiEndpoints.teaserVideo + '?userId=${HiveService().getValue(HiveService.userId)}',
         parser: (data) => videoUrl = data['data']['url'],
       );
 
       if (videoUrl != null) {
+        log("-------------------->videoUrl------>${videoUrl}");
         controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl!))
           ..initialize().then((value) {
             controller?.play();
@@ -48,9 +96,8 @@ class HomeController extends GetxController {
           });
 
         controller?.addListener(() {
-          update(); // rebuilds GetBuilder when position changes
+          update();
         });
-
         // controller!.play();
       }
     } catch (e) {
@@ -156,11 +203,15 @@ class HomeController extends GetxController {
     update(); // Update UI to show loading
 
     final response = await _apiService.get<CategoriesModel?>(
-      ApiEndpoints.getAllCategories,
+      ApiEndpoints.getAllCategories +'?userId=${HiveService().getValue(HiveService.userId)}',
       parser: (data) => CategoriesModel.fromJson(data),
     );
 
     categoriesModel = response;
+
+    categoriesModel.data?.data?.sort(
+      (a, b) => (a.name ?? '').compareTo(b.name ?? ''),
+    );
     List categoryName = [];
 
     for (int i = 0; i < (categoriesModel.data?.data ?? []).length; i++) {

@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:shivam_stores/core/routes/app_routes.dart';
 import 'package:shivam_stores/model/api_response_model.dart';
 import 'package:shivam_stores/services/api_endpoints.dart';
+import 'package:shivam_stores/services/hive_service.dart';
 
 class ApiService extends GetxService {
   late Dio _dio;
@@ -66,13 +68,20 @@ class ApiService extends GetxService {
         endpoint,
         queryParameters: queryParameters,
       );
-      print("----------response.data--->${response.data}");
+      log("----------response.data--->${response.data}");
 
       if (response.statusCode == 200) {
         final data =
             parser != null ? parser(response.data) : response.data as T;
 
         return ApiResponse<T>().success(data);
+      } else if (response.statusCode == 604) {
+        HiveService().setValue(HiveService.userId, null);
+        Get.offAllNamed(AppRoutes.kLoginScreen);
+
+        return ApiResponse<T>().failure(
+          'Request failed with status: ${response.statusCode}',
+        );
       } else if (response.data['message'].toString().contains('empty')) {
         final data =
             parser != null ? parser(response.data) : response.data as T;
@@ -84,16 +93,26 @@ class ApiService extends GetxService {
         );
       }
     } on DioException catch (e) {
+      log("----------e--->${e.response?.statusCode}");
+      if (e.response?.statusCode == 604) {
+        HiveService().setValue(HiveService.userId, null);
+        Get.offAllNamed(AppRoutes.kLoginScreen);
+      }
       if (e.response!.data['message'].toString().contains('empty') ||
           e.response!.data['message'].toString().contains('No')) {
         final data =
             parser != null ? parser(e.response!.data) : e.response!.data as T;
 
+        log("---------->DioException success: $e");
+
         return ApiResponse<T>().success(data);
       } else {
+        log("---------->DioException failure: $e");
+
         return ApiResponse<T>().failure(_handleDioError(e));
       }
     } catch (e) {
+      log("---------->Unexpected error: $e");
       return ApiResponse<T>().failure('Unexpected error: $e');
     }
   }
@@ -113,17 +132,28 @@ class ApiService extends GetxService {
         data: data,
         queryParameters: queryParameters,
       );
-      print("----------------->response.data${response.data}");
+      log("----------------->response.data${response.data}");
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseData =
             parser != null ? parser(response.data) : response.data as T;
         return ApiResponse<T>().success(responseData);
+      } else if (response.statusCode == 604) {
+        HiveService().setValue(HiveService.userId, null);
+        Get.offAllNamed(AppRoutes.kLoginScreen);
+
+        return ApiResponse<T>().failure(
+          'Request failed with status: ${response.statusCode}',
+        );
       } else {
         return ApiResponse<T>().failure(
           'Request failed with status: ${response.statusCode}',
         );
       }
     } on DioException catch (e) {
+      if (e.response?.statusCode == 604) {
+        HiveService().setValue(HiveService.userId, null);
+        Get.offAllNamed(AppRoutes.kLoginScreen);
+      }
       print("-----------------DioException>${e}");
       final res = e.response?.data;
 
@@ -158,12 +188,23 @@ class ApiService extends GetxService {
         final responseData =
             parser != null ? parser(response.data) : response.data as T;
         return ApiResponse<T>().success(responseData);
+      } else if (response.statusCode == 604) {
+        HiveService().setValue(HiveService.userId, null);
+        Get.offAllNamed(AppRoutes.kLoginScreen);
+
+        return ApiResponse<T>().failure(
+          'Request failed with status: ${response.statusCode}',
+        );
       } else {
         return ApiResponse<T>().failure(
           'Request failed with status: ${response.statusCode}',
         );
       }
     } on DioException catch (e) {
+      if (e.response?.statusCode == 604) {
+        HiveService().setValue(HiveService.userId, null);
+        Get.offAllNamed(AppRoutes.kLoginScreen);
+      }
       return ApiResponse<T>().failure(_handleDioError(e));
     } catch (e) {
       return ApiResponse<T>().failure('Unexpected error: $e');
@@ -186,12 +227,23 @@ class ApiService extends GetxService {
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         return ApiResponse<bool>().success(true);
+      } else if (response.statusCode == 604) {
+        HiveService().setValue(HiveService.userId, null);
+        Get.offAllNamed(AppRoutes.kLoginScreen);
+
+        return ApiResponse<bool>().failure(
+          'Request failed with status: ${response.statusCode}',
+        );
       } else {
         return ApiResponse<bool>().failure(
           'Request failed with status: ${response.statusCode}',
         );
       }
     } on DioException catch (e) {
+      if (e.response?.statusCode == 604) {
+        HiveService().setValue(HiveService.userId, null);
+        Get.offAllNamed(AppRoutes.kLoginScreen);
+      }
       return ApiResponse<bool>().failure(_handleDioError(e));
     } catch (e) {
       return ApiResponse<bool>().failure('Unexpected error: $e');

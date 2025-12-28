@@ -54,6 +54,9 @@ dependencies:
   geocoding: ^4.0.0
   flutter_launcher_icons: ^0.14.4
   smooth_page_indicator: ^1.2.1
+  no_screenshot: ^0.3.1
+  zoomable_interactive_viewer: ^0.0.4
+  # device_preview: 
   
 
 dev_dependencies:

@@ -38,7 +38,7 @@ class ManageOrderModel {
 
 class Order {
   String? orderId;
-  DateTime? date;
+  String? date;
   String? city;
   String? firmName;
   String? category;
@@ -67,7 +67,7 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
     orderId: json["orderId"],
-    date: DateTime.tryParse(json["date"]),
+    date: json["date"],
     city: json["city"],
     firmName: json["firmName"],
     category: json["category"],
@@ -82,7 +82,7 @@ class Order {
 
   Map<String, dynamic> toJson() => {
     "orderId": orderId,
-    "date": date?.toIso8601String(),
+    "date": date,
     "city": city,
     "firmName": firmName,
     "category": category,

@@ -107,13 +107,14 @@ class OrdersScreen extends StatelessWidget {
                                 alignment: Alignment.center,
                                 padding: EdgeInsets.symmetric(vertical: 5),
                                 child: cText(
-                                  value: DateFormat(
-                                    'dd-MM-yyyy',
-                                  ).format(DateTime.parse(date ?? "")),
+                                  value: (date ?? '').isEmpty ? '' : '${date}',
+                                  // : DateFormat(
+                                  //   'dd-MM-yyyy',
+                                  // ).format(DateTime.parse(date ?? "")),
                                   color: AppColors.whiteColor.withOpacity(0.75),
                                   fontWeight: FontWeight.w600,
 
-                                  fontSize: 14,
+                                  fontSize: 16,
                                 ),
                               ),
                               AppSpacing.h5,
@@ -125,8 +126,11 @@ class OrdersScreen extends StatelessWidget {
                                   child: cText(
                                     value: "(${order})",
 
+                                    decoration: TextDecoration.underline,
+
                                     color: AppColors.whiteColor,
-                                    fontSize: 12,
+                                    decorationColor: AppColors.whiteColor,
+                                    fontSize: 14,
                                   ),
                                 ),
                               AppSpacing.h10,

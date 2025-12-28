@@ -26,12 +26,12 @@ class LoginScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
-        title: cText(
-          value: Strings.kWelcomeBack,
-          fontSize: 20,
-          color: AppColors.whiteColor,
-          fontWeight: FontWeight.w600,
-        ),
+        toolbarHeight: 0, // title: cText(
+        //   value: Strings.kWelcomeBack,
+        //   fontSize: 20,
+        //   color: AppColors.whiteColor,
+        //   fontWeight: FontWeight.w600,
+        // ),
         centerTitle: true,
       ),
 

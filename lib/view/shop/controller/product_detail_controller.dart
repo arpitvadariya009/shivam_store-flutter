@@ -16,6 +16,8 @@ import 'package:shivam_stores/view/shop/model/product_detail_model.dart';
 
 class ProductDetailController extends GetxController {
   String id = "";
+  List<TransformationController> zoomControllers = [];
+
   TapDownDetails? doubleTapDetails;
   String title = "";
   TransformationController transformationController =
@@ -93,13 +95,19 @@ class ProductDetailController extends GetxController {
     required String productCode,
     required int increment,
     required String productId,
+    required String categoryId,
   }) async {
     log("--------increment--->${increment}");
-    if (title.contains('CART')) {
+    log("-----------categoryId--->${categoryId}");
+    log("-----------setSize--->${varinat?.setSize}");
+    log("-----------qty--->${varinat?.qty}");
+
+    if (title.contains('CART') && varinat?.qty != varinat?.setSize) {
       await _apiService.put(
-        ApiEndpoints.updateToCart,
+        ApiEndpoints.updateToCart +
+            '?userId=${HiveService().getValue(HiveService.userId)}',
         data: {
-          "categoryId": categoryId ?? Get.find<ShopController>().id,
+          "categoryId": categoryId,
           "userId": HiveService().getValue(HiveService.userId),
           "productCode": productCode,
           "productId": productId,
@@ -110,15 +118,15 @@ class ProductDetailController extends GetxController {
       Get.find<CartController>().fetchCart();
     } else {
       await _apiService.post(
-        ApiEndpoints.addToOrder,
+        ApiEndpoints.addToOrder +
+            '?userId=${HiveService().getValue(HiveService.userId)}',
         data: {
           "userId": HiveService().getValue(HiveService.userId),
           "productCode": productCode,
           "productId": productId,
           "variantName": varinat?.name,
           "increment": increment,
-          "categoryId":
-              Get.find<ShopController>().id, // ✅ fixed (removed space)
+          "categoryId": categoryId, // ✅ fixed (removed space)
         },
       );
     }
@@ -132,7 +140,7 @@ class ProductDetailController extends GetxController {
     required bool available,
   }) async {
     await _apiService.get(
-      '${ApiEndpoints.getToAvailable}?productId=$productId&variantId=$variantId&available=$available',
+      '${ApiEndpoints.getToAvailable}?userId=${HiveService().getValue(HiveService.userId)}&productId=$productId&variantId=$variantId&available=$available',
     );
   }
 
@@ -149,7 +157,8 @@ class ProductDetailController extends GetxController {
 
     if (isFavorite == true) {
       await _apiService.post(
-        ApiEndpoints.createFavorite,
+        ApiEndpoints.createFavorite +
+            '?userId=${HiveService().getValue(HiveService.userId)}',
         data: {
           "userId": HiveService().getValue(HiveService.userId),
           "productId": productId,
@@ -157,7 +166,8 @@ class ProductDetailController extends GetxController {
       );
     } else {
       await _apiService.delete(
-        ApiEndpoints.deleteFavorite,
+        ApiEndpoints.deleteFavorite +
+            '?userId=${HiveService().getValue(HiveService.userId)}',
         data: {
           "userId": HiveService().getValue(HiveService.userId),
           "productId": productId,
@@ -172,6 +182,13 @@ class ProductDetailController extends GetxController {
       }
     }
     update();
+  }
+
+  TransformationController getController(int index) {
+    if (index < zoomControllers.length) {
+      return zoomControllers[index];
+    }
+    return TransformationController();
   }
 }
 
